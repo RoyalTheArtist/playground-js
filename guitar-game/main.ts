@@ -1,94 +1,129 @@
 "use strict";
+import { ECS, Entity, Component, System, Aspect } from "./ecs"
+import { Engine } from './engine'
+import Surface from "./surface"
+import { Physics, Position, Velocity, DrawPositions } from "./systems"
 
-class Surface {
-  canvas: HTMLCanvasElement
-  ctx: CanvasRenderingContext2D
-  x: number = 0
-  y: number = 0
+type KeyStates = "down" | "up"
 
-  constructor(width: number, height: number) {
-    this.canvas = document.createElement('canvas') as HTMLCanvasElement
-    this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D
-
-    this.canvas.width = width
-    this.canvas.height = height
-  }
-
-  draw(ctx: CanvasRenderingContext2D) {
-    
-    ctx.drawImage(this.canvas, this.x, this.y)
-  }
-
-  clear() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-  }
+enum ActionStates {
+  Released = 0,
+  Pressed,
+  Held
 }
 
-class GameObject {
-  x: number
-  y: number
-  velocity: [number, number] = [0,0]
-  constructor(x: number, y: number) {
-    this.x = x
-    this.y = y
+class Keyboard {
+  static keyState: Map<string, KeyStates> = new Map()
+  constructor() {
+      window.addEventListener("keydown", Keyboard.keyDown)
+      window.addEventListener("keyup", Keyboard.keyUp)
   }
-  update(_delta: number): void {}
-  draw(_ctx: CanvasRenderingContext2D): void {}
-}
 
-class Square extends GameObject {
-  movementSpeed: number = 5
-  constructor(
-    public x: number, 
-    public y: number, 
-    public width: number, 
-    public height: number,
-    velocity?: [number, number]) {
-      super(x, y)
-      if (velocity) this.velocity = velocity
+  static setup() {
+    this.keyState.set("ArrowLeft", "up")
+    this.keyState.set("ArrowRight", "up")
+    this.keyState.set("ArrowUp", "up")
+    this.keyState.set("ArrowDown", "up")
+  }
+
+  private static keySupported(key: string) {
+    return this.keyState.has(key)
+  }
+
+  private static keyDown(event: KeyboardEvent) {
+    if (Keyboard.keySupported(event.key)) {
+      Keyboard.keyState.set(event.key, "down")
     }
+  }
 
-    update(delta: number) {
-      const [vel_x, vel_y] = this.velocity 
-      this.x += vel_x * delta * this.movementSpeed
-      this.y += vel_y * delta * this.movementSpeed
+  private static keyUp(event: KeyboardEvent) {
+    if (Keyboard.keySupported(event.key)) {
+      Keyboard.keyState.set(event.key, "up")
     }
-
-    draw(ctx: CanvasRenderingContext2D) {
-      ctx.strokeStyle = "blue"
-      ctx.strokeRect(this.x, this.y, this.width, this.height)
-    }
-
+  }
 }
 
-class Engine {
-  x: number = 0
-  y: number = 0
-  gameObjects: GameObject[]
-  constructor(public surface: Surface) {
-    this.gameObjects = [
-      new Square(0,0,25,25, [1, 0])
-    ]
-  }
+const KeyboardMap = {
+  MoveLeft: "ArrowLeft",
+  MoveRight: "ArrowRight",
+  MoveUp: "ArrowUp",
+  MoveDown: "ArrowDown"
+}
 
-  update(delta: number) {
-    this.gameObjects.forEach((obj) => obj.update(delta))
-  }
+class KeyboardTransformer {
+  static transform(keyboardState: Map<string, KeyStates>, playerKeyMappings: Record<string, string>): Map<string, ActionStates> {
+    const actions = new Map<string, ActionStates>()
+    Object.keys(playerKeyMappings).forEach((key) => {
+      const inputKey = playerKeyMappings[key]
 
-  draw(ctx: CanvasRenderingContext2D) {
-      ctx.clearRect(0,0, this.surface.canvas.width, this.surface.canvas.height)
-
-      //this.surface.ctx.strokeRect(this.x, this.y, 25, 25)
-      
-      this.surface.clear()
-      this.gameObjects.forEach((obj) => obj.draw(this.surface.ctx))
-      this.surface.draw(ctx)
+      if (keyboardState.has(inputKey)) {
+        const keyState = keyboardState.get(inputKey)
+        if (keyState === "down") {
+          actions.set(key, ActionStates.Pressed)
+        } else if (keyState === "up") {
+          actions.set(key, ActionStates.Released)
+        }
+      }
+    })
+    return actions
   }
 }
+
+class Input {
+  inputStates: Map<string, string> = new Map()
+  constructor() {
+    new Keyboard()
+    Keyboard.setup()
+  }
+
+  static isActionPressed(action: string): boolean {
+    const actions = KeyboardTransformer.transform(Keyboard.keyState, KeyboardMap)
+    return actions.get(action) === ActionStates.Pressed
+  }
+}
+
+
+class PlayerInput extends System {
+  public componentsRequired = new Set<Function>([Player])
+
+  update(entities: Map<Entity, Aspect>): void {
+    let velocity = {x: 0, y: 0}
+    if (Input.isActionPressed("MoveUp")) {
+      velocity = {...velocity, y: -1}
+    }
+    if (Input.isActionPressed("MoveDown")) {
+      velocity = {...velocity, y: 1}
+    }
+    if (Input.isActionPressed("MoveLeft")) {
+      velocity = {...velocity, x: -1}
+    }
+    if (Input.isActionPressed("MoveRight")) {
+      velocity = {...velocity, x: 1}
+    }
+    entities.forEach((_, entity) => {
+      this.ecs.addComponent(entity, new Velocity(velocity.x, velocity.y))
+    })
+  }
+
+  constructor() {
+    super()
+    new Input()
+  }
+}
+
+class Player extends Component { }
 
 function setup(el: string) {
-  const surface = new Surface(360, 760)
-  const engine = new Engine(surface)
+  new Surface(360, 760)
+
+  const ecs = new ECS()
+  const entity = ecs.addEntity()
+  ecs.addComponent(entity, new Position(50, 50))
+  ecs.addComponent(entity, new Player())
+  ecs.addSystem(new PlayerInput())
+  ecs.addSystem(new Physics())
+  ecs.addSystem(new DrawPositions())
+  const engine = new Engine(ecs)
 
   const canvas = document.getElementById(el) as HTMLCanvasElement
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
@@ -109,7 +144,6 @@ const oldTimeStamp = 0
 function main() {
   const { engine, ctx } = setup('game')
 
-
   function gameLoop(timeStamp: number) {
     const delta = (timeStamp - oldTimeStamp) / 1000
     engine.update(delta)
@@ -122,3 +156,4 @@ function main() {
 }
 
 main()
+
