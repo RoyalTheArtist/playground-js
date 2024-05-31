@@ -20,7 +20,6 @@ class Surface {
     }
 
     static draw(ctx: CanvasRenderingContext2D) {
-      
       ctx.drawImage(canvas, Surface.x, Surface.y, 360, 700)
     }
   

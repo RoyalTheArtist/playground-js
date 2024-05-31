@@ -1,34 +1,17 @@
 import { ECS } from "./ecs"
+import { Stage } from "./graphics/graphics"
 import Surface from "./graphics/surface"
 
-class FPS_DEBUG {
-  tickTime = 0
-  fps = 0
 
-  constructor() { }
 
-  update(delta: number) {
-    this.tickTime += delta * 1000
 
-    if (this.tickTime > 1000) {
-      this.tickTime = 0 
-      this.fps = Math.round(1 / delta)
-    }
-  }
-  
-  draw(ctx: CanvasRenderingContext2D) {
-    ctx.font = '12px Arial'
-    ctx.fillStyle = 'black'
-    ctx.fillText(`FPS: ${this.fps}`, 10, 12)
-  }
-}
+
 
 class Engine {
-  debug: FPS_DEBUG = new FPS_DEBUG()
   private prevTimeStamp: number = 0
-
-  constructor(public ecs: ECS) {
-   
+  public stage: Stage 
+  constructor(public ecs: ECS, stage: Stage) {
+    this.stage = stage
   }
 
   update(timeStamp: number) {
@@ -39,15 +22,11 @@ class Engine {
     this.ecs.update(max_delta)
 
     // debug
-    this.debug.update(delta)
+
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    //this.surface.ctx.strokeRect(this.x, this.y, 25, 25)
-    
-    //Surface.ctx.drawImage(background, 0, 0)
-    Surface.draw(ctx)
-    this.debug.draw(ctx)
+    this.stage.render(ctx)
   }
 }
 

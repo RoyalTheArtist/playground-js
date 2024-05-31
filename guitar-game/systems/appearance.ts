@@ -1,28 +1,9 @@
 import { System, Component, Entity, Aspect } from "../ecs";
+import { GraphicObject, ImageGraphic, RectangleGraphic, SpriteGraphic, Stage } from "../graphics/graphics";
 import Surface from "../graphics/surface";
 import { Position } from "../systems";
 
 
-class SpriteAtlas {
-    private _sprite_atlas = new Map<string, HTMLCanvasElement>()
-    constructor() {
-
-    }
-
-    buildRectangle(name: string, width: number, height: number, color: string = "red") {
-        const canvas = document.createElement('canvas') as HTMLCanvasElement
-        canvas.width = width
-        canvas.height = height
-        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-        ctx.fillStyle = color
-        ctx.fillRect(0, 0, width, height)
-        this._sprite_atlas.set(name, canvas)
-    }
-
-    buildSprite() {
-
-    }
-}
 
 
 export class Appearance extends Component {
@@ -71,18 +52,76 @@ export class AppearanceRenderer extends System {
 
 
 export class Sprite extends Component {
-    url: string
-    constructor(public name: string) {
+    private _url: string
+    constructor(url: string, public offset: boolean = false) {
+        super()
+        this._url = url
+    }
+
+    get url(): string { return this._url }
+}
+
+class SpriteAspect extends Aspect {
+    public graphic: GraphicObject
+    constructor() {
         super()
     }
 }
+
 export class SpriteRenderer extends System {
     public componentsRequired = new Set<Function>([Position, Sprite]);
 
-    public onAdd(aspect: Aspect): void {
-        console.log(aspect)
+    public makeAspect(): Aspect {
+        return new SpriteAspect()
+    }
+    constructor(public stage: Stage) {
+        super()
     }
 
-    update(entities: Map<Entity, Aspect>): void {
+    public onAdd(aspect: SpriteAspect): void {
+        const sprite = aspect.get(Sprite)
+        const position = aspect.get(Position)
+
+        const img = new ImageGraphic(sprite.url)
+        const graphicOjb = new SpriteGraphic(img, position.p.x, position.p.y, sprite.offset)
+        //this.ctx.drawImage(sprite.url, position.p.x, position.p.y)
+        console.log(sprite.url)
+        aspect.graphic = graphicOjb
+        this.stage.add(graphicOjb)
+    }
+
+    update(entities: Map<Entity, SpriteAspect>): void {
+        entities.forEach((aspect, entity) => {
+            const position = this.ecs.getComponents(entity).get(Position)
+           
+            aspect.graphic.x = position.p.x
+            aspect.graphic.y = position.p.y
+        })
+    }
+}
+
+export class DrawPosition extends System {
+    public componentsRequired = new Set<Function>([Position]);
+
+    constructor(public stage: Stage) {
+        super()
+    }
+    public makeAspect(): Aspect {
+        return new SpriteAspect()
+    }
+    public onAdd(aspect: SpriteAspect): void {
+        const position = aspect.get(Position)
+        const sprite = new RectangleGraphic(1, 1, 'red', position.p.x, position.p.y)
+        this.stage.add(sprite)
+        aspect.graphic = sprite
+
+    }
+    update(entities: Map<Entity, SpriteAspect>): void { 
+        entities.forEach((aspect,entity) => {
+            const position = this.ecs.getComponents(entity).get(Position)
+           
+            aspect.graphic.x = position.p.x
+            aspect.graphic.y = position.p.y
+        })
     }
 }
