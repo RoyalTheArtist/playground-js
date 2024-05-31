@@ -13,7 +13,7 @@ abstract class System {
     public onAdd(_aspect: Aspect): void { }
     
     public onRemove(_aspect: Aspect): void { }
-    public abstract update(entities: Map<Entity, Aspect>): void
+    public abstract update(entities: Map<Entity, Aspect>, _delta: number): void
 }
 
 type ComponentClass<T extends Component> = new (...args: any[]) => T
@@ -120,7 +120,7 @@ class ECS {
 
   public update(delta: number): void {
     for (let [system, entities] of this.systems.entries()) {
-      system.update(entities)
+      system.update(entities, delta)
     }
 
     while (this.entitiesToDestroy.length > 0) {

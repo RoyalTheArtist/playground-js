@@ -1,54 +1,117 @@
+import { System, Entity, Aspect, Component } from "./ecs"
+import { Velocity } from "./systems"
 
 
-const keyboardInputs = {
-    axis: {
-        "MoveLeft": [0, -1],
-        "MoveRight": [0, 1],
-        "MoveUp": [1, 0],
-        "MoveDown": [-1, 0],
-    }
-    
-}
 
-type KeyStates = "pressed" | "released" | "held"
+export class Player extends Component { }
 
-const StandardGameInput = {
-    axis: {
-        x: 0,
-        y: 0
-    },
-    actions: {
-        MoveLeft: "released",
-        MoveRight: "released",
-        MoveUp: "released",
-        MoveDown: "released",
-    }
+type KeyStates = "down" | "up"
+
+enum ActionStates {
+  Released = 0,
+  Pressed,
+  Held
 }
 
 class Keyboard {
-    static keys: Map<string, string> = new Map()
-    constructor() {
-        window.addEventListener("keydown", (e) => {
-            this.keyDown(e.key)
-        })
-        window.addEventListener("keyup", (e) => {
-            this.keyUp(e.key)
-        })
-    }
+  static keyState: Map<string, KeyStates> = new Map()
+  constructor() {
+      window.addEventListener("keydown", Keyboard.keyDown)
+      window.addEventListener("keyup", Keyboard.keyUp)
+  }
 
-    setup() {
+  static setup() {
+    this.keyState.set("ArrowLeft", "up")
+    this.keyState.set("ArrowRight", "up")
+    this.keyState.set("ArrowUp", "up")
+    this.keyState.set("ArrowDown", "up")
+  }
 
-    }
+  private static keySupported(key: string) {
+    return this.keyState.has(key)
+  }
 
-    private keyDown(key: string) {
-        
+  private static keyDown(event: KeyboardEvent) {
+    if (Keyboard.keySupported(event.key)) {
+      Keyboard.keyState.set(event.key, "down")
     }
+  }
 
-    private keyUp(key: string) {
-        Input.keyUp(key)
+  private static keyUp(event: KeyboardEvent) {
+    if (Keyboard.keySupported(event.key)) {
+      Keyboard.keyState.set(event.key, "up")
     }
+  }
 }
 
-interface InputMap {
-    [action: string]: string
+const KeyboardMap = {
+  MoveLeft: "ArrowLeft",
+  MoveRight: "ArrowRight",
+  MoveUp: "ArrowUp",
+  MoveDown: "ArrowDown"
+}
+
+class KeyboardTransformer {
+  static transform(keyboardState: Map<string, KeyStates>, playerKeyMappings: Record<string, string>): Map<string, ActionStates> {
+    const actions = new Map<string, ActionStates>()
+    Object.keys(playerKeyMappings).forEach((key) => {
+      const inputKey = playerKeyMappings[key]
+
+      if (keyboardState.has(inputKey)) {
+        const keyState = keyboardState.get(inputKey)
+        if (keyState === "down") {
+          actions.set(key, ActionStates.Pressed)
+        } else if (keyState === "up") {
+          actions.set(key, ActionStates.Released)
+        }
+      }
+    })
+    return actions
+  }
+}
+
+class Input {
+  inputStates: Map<string, string> = new Map()
+  constructor() {
+    new Keyboard()
+    Keyboard.setup()
+  }
+
+  static isActionPressed(action: string): boolean {
+    const actions = KeyboardTransformer.transform(Keyboard.keyState, KeyboardMap)
+    return actions.get(action) === ActionStates.Pressed
+  }
+}
+
+
+class PlayerInput extends System {
+  public componentsRequired = new Set<Function>([Player])
+
+  update(entities: Map<Entity, Aspect>): void {
+    let velocity = {x: 0, y: 0}
+    if (Input.isActionPressed("MoveUp")) {
+      velocity = {...velocity, y: -1}
+    }
+    if (Input.isActionPressed("MoveDown")) {
+      velocity = {...velocity, y: 1}
+    }
+    if (Input.isActionPressed("MoveLeft")) {
+      velocity = {...velocity, x: -1}
+    }
+    if (Input.isActionPressed("MoveRight")) {
+      velocity = {...velocity, x: 1}
+    }
+    entities.forEach((_, entity) => {
+      this.ecs.addComponent(entity, new Velocity(velocity.x, velocity.y, 200))
+    })
+  }
+
+  constructor() {
+    super()
+    new Input()
+  }
+}
+
+export {
+  PlayerInput
 }

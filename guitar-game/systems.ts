@@ -1,5 +1,5 @@
 import { Aspect, Component, Entity, System } from "./ecs"
-import Surface from "./surface"
+import Surface from "./graphics/surface"
 
 type Point = {x: number, y: number}
 
@@ -34,7 +34,7 @@ class DrawPositions extends System {
 }
 
 class Velocity extends Component {
-  constructor(public vx: number, public vy: number) {
+  constructor(public vx: number, public vy: number, public speed: number = 20) {
     super()
   }
 }
@@ -42,12 +42,12 @@ class Velocity extends Component {
 class Physics extends System {
   private logged = false
   public componentsRequired = new Set<Function>([Position, Velocity])
-  update(entities: Map<Entity, Aspect>): void { 
+  update(entities: Map<Entity, Aspect>, delta: number): void { 
     entities.forEach((_aspect, entity) => {
       const position = this.ecs.getComponents(entity).get(Position)
       const velocity = this.ecs.getComponents(entity).get(Velocity)
-      position.p.x += velocity.vx
-      position.p.y += velocity.vy
+      position.p.x += (velocity.vx * velocity.speed) * delta
+      position.p.y += (velocity.vy * velocity.speed) * delta
     })
 
     if (!this.logged) {
