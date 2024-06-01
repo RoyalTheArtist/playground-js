@@ -41,17 +41,23 @@ async function main() {
   const { engine, viewport } = setup('game')
 
   const debug = new FPS_DEBUG()
-  const background = await loadSprite("guitar-game/assets/background-night.png")
 
+  let prevTimeStamp = 0
 
-  function gameLoop(timeStamp: number) {
+  function gameLoop(timeStamp) {
+    const delta = (timeStamp - prevTimeStamp) / 1000
+    const max_delta = Math.min(delta, 0.1)
+    prevTimeStamp = timeStamp
+
+    engine.update(max_delta)
+    debug.update(max_delta)
+
     viewport.ctx.clearRect(0, 0, viewport.canvas.width, viewport.canvas.height)
 
     Surface.clear()
-    engine.update(timeStamp)
-    debug.update(timeStamp)
     engine.draw(Surface.ctx)
     Surface.draw(viewport.ctx)
+
     debug.draw(viewport.ctx)
     requestAnimationFrame(gameLoop)
   }
