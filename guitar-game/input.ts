@@ -23,8 +23,6 @@ class Keyboard {
   static setup() {
     this.keyState.set("ArrowLeft", "up")
     this.keyState.set("ArrowRight", "up")
-    this.keyState.set("ArrowUp", "up")
-    this.keyState.set("ArrowDown", "up")
   }
 
   private static keySupported(key: string) {
@@ -47,8 +45,6 @@ class Keyboard {
 const KeyboardMap = {
   MoveLeft: "ArrowLeft",
   MoveRight: "ArrowRight",
-  MoveUp: "ArrowUp",
-  MoveDown: "ArrowDown"
 }
 
 class KeyboardTransformer {
@@ -89,12 +85,7 @@ class PlayerInput extends System {
 
   update(entities: Map<Entity, Aspect>): void {
     let velocity = {x: 0, y: 0}
-    if (Input.isActionPressed("MoveUp")) {
-      velocity = {...velocity, y: -1}
-    }
-    if (Input.isActionPressed("MoveDown")) {
-      velocity = {...velocity, y: 1}
-    }
+
     if (Input.isActionPressed("MoveLeft")) {
       velocity = {...velocity, x: -1}
     }
