@@ -84,8 +84,7 @@ export class SpriteRenderer extends System {
 
         const img = new ImageGraphic(sprite.url)
         const graphicOjb = new SpriteGraphic(img, position.p.x, position.p.y, sprite.offset)
-        //this.ctx.drawImage(sprite.url, position.p.x, position.p.y)
-        console.log(sprite.url)
+
         aspect.graphic = graphicOjb
         this.stage.add(graphicOjb)
     }
