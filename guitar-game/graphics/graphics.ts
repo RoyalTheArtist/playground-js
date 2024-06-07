@@ -63,6 +63,8 @@ export class RectangleGraphic extends GraphicObject {
     _color: string
     constructor(width: number, height: number, color: string = "red", x: number = 0, y: number = 0) {
         super(x, y)
+        this._width = width
+        this._height = height
         this.buildRectangle(width, height, color)
     }
 
@@ -77,7 +79,9 @@ export class RectangleGraphic extends GraphicObject {
         this.rectangle = canvas
     }
     public render(ctx) {
-        ctx.drawImage(this.rectangle, this.x, this.y)
+        ctx.translate(this.x, this.y)
+        ctx.drawImage(this.rectangle, -(this._width/2), -this._height/2)
+        ctx.translate(-this.x, -this.y )
     }
 
 }
