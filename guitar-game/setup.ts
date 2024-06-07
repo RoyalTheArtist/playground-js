@@ -89,14 +89,6 @@ class DrawCollisions extends System {
 
 class CollisionDetector extends System {
     public componentsRequired = new Set<Function>([Position, Collision]);
-    constructor() { super() }
-
-    public makeAspect(): Aspect {
-        return new Aspect()
-    }
-    public onAdd(aspect: Aspect) {
-        // nop
-    }
     update(entities: Map<Entity, Aspect>): void {
         for (const entity of entities.keys()) {
             const pos1 = this.ecs.getComponents(entity).get(Position)
@@ -119,18 +111,6 @@ class CollisionDetector extends System {
                 }
             }
         }
-
-
-        // const pairs = this.ecs.getEntityPairs(this.componentsRequired)
-        // pairs.forEach(([entity1, entity2]) => {
-        //     const position1 = this.ecs.getComponents(entity1).get(Position)
-        //     const collision1 = this.ecs.getComponents(entity1).get(Collision)
-
-        //     const position2 = this.ecs.getComponents(entity2).get(Position)
-        //     const collision2 = this.ecs.getComponents(entity2).get(Collision)
-
-           
-        // })
     }
 }
 
