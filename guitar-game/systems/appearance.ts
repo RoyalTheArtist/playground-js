@@ -89,6 +89,10 @@ export class SpriteRenderer extends System {
         this.stage.add(graphicOjb)
     }
 
+    public onRemove(aspect: SpriteAspect): void {
+        this.stage.remove(aspect.graphic)
+    }
+
     update(entities: Map<Entity, SpriteAspect>): void {
         entities.forEach((aspect, entity) => {
             const position = this.ecs.getComponents(entity).get(Position)
@@ -114,6 +118,10 @@ export class DrawPosition extends System {
         this.stage.add(sprite)
         aspect.graphic = sprite
 
+    }
+
+    public onRemove(aspect: SpriteAspect): void {
+        this.stage.remove(aspect.graphic)
     }
     update(entities: Map<Entity, SpriteAspect>): void { 
         entities.forEach((aspect,entity) => {

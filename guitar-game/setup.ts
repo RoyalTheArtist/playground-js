@@ -5,15 +5,14 @@ import Surface from "./graphics/surface"
 import { Position, Physics, Velocity } from "./systems"
 import { Sprite, SpriteRenderer,  } from "./systems/appearance"
 import { GraphicObject, RectangleGraphic, Stage } from "./graphics/graphics"
+import { Collision, CollisionDetector, PlayerCollisions } from "./systems/collisions"
+import { Rose } from "./components"
 
 export const GAME_SETTINGS = {
     width: 180,
     height: 350
   }
   
-class IsRose extends Component {
-    
-}
 
 class Spawner extends Component {
     timer: number = 0
@@ -46,75 +45,6 @@ class SpawnSystem extends System {
         
 }
 
-class Collision extends Component {
-    width: number
-    height: number
-    constructor(width: number, height: number) {
-        super()
-        this.width = width
-        this.height = height
-    }
-}
-
-class CollisionsAspect extends Aspect {
-    public graphic: RectangleGraphic
-    constructor() {
-        super()
-    }
-}
-
-class DrawCollisions extends System {
-    public componentsRequired = new Set<Function>([Position, Collision]);
-    constructor(public stage: Stage) { super() }
-
-    public makeAspect(): Aspect {
-        return new CollisionsAspect()
-    }
-    public onAdd(aspect: CollisionsAspect): void {
-        const position = aspect.get(Position)
-        const collision = aspect.get(Collision)
-        const sprite = new RectangleGraphic(collision.width, collision.height, 'red', position.p.x, position.p.y)
-        aspect.graphic = sprite
-        this.stage.add(sprite)
-    }
-    update(entities: Map<Entity, CollisionsAspect>): void {
-        entities.forEach((aspect, entity) => {
-            const position = this.ecs.getComponents(entity).get(Position)
-            
-            aspect.graphic.x = position.p.x
-            aspect.graphic.y = position.p.y
-        })
-    }
-}
-
-class CollisionDetector extends System {
-    public componentsRequired = new Set<Function>([Position, Collision]);
-    update(entities: Map<Entity, Aspect>): void {
-        for (const entity of entities.keys()) {
-            const pos1 = this.ecs.getComponents(entity).get(Position)
-            const col1 = this.ecs.getComponents(entity).get(Collision)
-
-            for (const entity2 of entities.keys()) {
-                if (entity === entity2) {
-                    continue
-                }
-                const pos2 = this.ecs.getComponents(entity2).get(Position)
-                const col2 = this.ecs.getComponents(entity2).get(Collision)
-
-                if (
-                    pos1.p.x + col1.width > pos2.p.x &&
-                    pos1.p.x < pos2.p.x + col2.width &&
-                    pos1.p.y + col1.height > pos2.p.y &&
-                    pos1.p.y < pos2.p.y + col2.height
-                ) {
-                    //console.log(`Collision detected between ${entity} and ${entity2}`)
-                }
-            }
-        }
-    }
-}
-
-
 export function setup(el: string) {
     new Surface(GAME_SETTINGS.width, GAME_SETTINGS.height)
     const stage = new Stage(GAME_SETTINGS.width, GAME_SETTINGS.height)
@@ -135,6 +65,7 @@ export function setup(el: string) {
     ecs.addComponent(roseSpawn, new Spawner(8000, (x, y, ecs: ECS) => {
         console.debug("Rose spawned")
         const rose = ecs.addEntity()
+        ecs.addComponent(rose, new  Rose())
         ecs.addComponent(rose, new Position(x, y))
         ecs.addComponent(rose, new Sprite("guitar-game/assets/rose.png"))
         ecs.addComponent(rose, new Velocity(0, 1, 50))
@@ -147,6 +78,7 @@ export function setup(el: string) {
     ecs.addSystem(new SpawnSystem())
     ecs.addSystem(new Physics())
     ecs.addSystem(new CollisionDetector())
+    ecs.addSystem(new PlayerCollisions())
     
 
 

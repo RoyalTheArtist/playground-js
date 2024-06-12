@@ -132,9 +132,10 @@ class ECS {
     this.entities.delete(entity)
     for (let [system, entities] of this.systems.entries()) {
         if (entities.has(entity)) {
-            const aspect = entities.get(entity)
+          const aspect = entities.get(entity)
+          system.onRemove(aspect as Aspect)
             entities.delete(entity)
-            system.onRemove(aspect as Aspect)
+            
         }
     }
   }

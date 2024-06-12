@@ -138,6 +138,10 @@ export class RectangleGraphic extends GraphicObject {
         public add(graphic: GraphicObject) {
             this.graphics.add(graphic)
         }
+
+        public remove(graphic: GraphicObject) {
+            this.graphics.delete(graphic)
+        }
       
         render(ctx: CanvasRenderingContext2D) {
             this.ctx.clearRect(0, 0, this.width, this.height)
