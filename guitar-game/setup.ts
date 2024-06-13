@@ -45,8 +45,53 @@ class SpawnSystem extends System {
         
 }
 
+export class EventQueue {
+    events: Map<string, Function[]>
+    onceQueue: Map<string, Function[]>
+    constructor() {
+        this.events = new Map()
+        this.onceQueue = new Map()
+    }
+
+    on(event: string, callback: Function) {
+        if (!this.events.has(event)) {
+            this.events.set(event, [])
+        }
+
+        this.events.get(event)?.push(callback)
+    }
+
+    public once(event: string, callback) {
+        if (!this.events.has(event)) {
+            this.events.set(event, [])
+        }
+
+        this.events.get(event)?.push(callback)
+    }
+
+    public emit(event: string, ...args) {
+        if(this.onceQueue.has(event)) {
+            this.onceQueue.get(event)?.forEach(callback => {
+                callback(...args)
+            })
+            this.onceQueue.delete(event)
+        }
+
+        if (this.events.has(event)) {
+            this.events.get(event)?.forEach(callback => {
+                callback(...args)
+            })
+        }
+    }
+}
+
+
+
 export function setup(el: string) {
     new Surface(GAME_SETTINGS.width, GAME_SETTINGS.height)
+
+    const events = new EventQueue()
+   
     const stage = new Stage(GAME_SETTINGS.width, GAME_SETTINGS.height)
     const ecs = new ECS()
   
@@ -78,7 +123,7 @@ export function setup(el: string) {
     ecs.addSystem(new SpawnSystem())
     ecs.addSystem(new Physics())
     ecs.addSystem(new CollisionDetector())
-    ecs.addSystem(new PlayerCollisions())
+    ecs.addSystem(new PlayerCollisions(events))
     
 
 
@@ -86,8 +131,10 @@ export function setup(el: string) {
     //ecs.addSystem(new DrawCollisions(stage))
     //ecs.addSystem(new DrawPosition(stage))
 
+  
+
     
-    const engine = new Engine(ecs, stage)
+    const engine = new Engine(ecs, stage, events)
   
     const canvas = document.getElementById(el) as HTMLCanvasElement
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D

@@ -1,6 +1,7 @@
 import { Component, Aspect, System, Entity } from "../ecs"
 import { RectangleGraphic, Stage } from "../graphics/graphics"
 import { Player } from "../input"
+import { EventQueue } from "../setup"
 import { Position } from "../systems"
 
 class Collision extends Component {
@@ -87,13 +88,17 @@ class CollisionDetector extends System {
 class PlayerCollisions extends System {
     public componentsRequired = new Set<Function>([Player, Colliding]);
 
+    constructor(public events: EventQueue) {
+        super()
+
+    }
     update(entities: Map<Entity, Aspect>): void {
         entities.forEach((_, entity) => {
             const colliding = this.ecs.getComponents(entity).get(Colliding)
             if (colliding) {
-                console.log("Player collided with ", colliding.target)
                 this.ecs.removeEntity(colliding.target)
                 this.ecs.removeComponent(entity, Colliding)
+                this.events.emit("collectRose", colliding.target)
             }
         })
     }

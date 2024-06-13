@@ -25,8 +25,6 @@ class Engine {
   setup() {
     this.events.on("collectRose", (args) => {
       this.playerStats.updateScore(1)
-
-      console.log(`rose ${args} collected`)
   })
   }
 

@@ -36,6 +36,13 @@ class FPS_DEBUG {
   }
 }
 
+function drawScore(ctx: CanvasRenderingContext2D, score: number) {
+  ctx.font = '18px Arial'
+  ctx.fillStyle = 'white'
+  ctx.fillText(`SCORE: ${score}`, 10, 36)
+}
+
+
 
 async function main() {
   const { engine, viewport } = setup('game')
@@ -58,7 +65,9 @@ async function main() {
     engine.draw(Surface.ctx)
     Surface.draw(viewport.ctx)
 
-    debug.draw(viewport.ctx)
+    drawScore(viewport.ctx, engine.playerStats.score)
+    
+    //debug.draw(viewport.ctx)
     requestAnimationFrame(gameLoop)
   }
 
