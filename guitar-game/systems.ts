@@ -27,7 +27,6 @@ class DrawPositions extends System {
       Surface.ctx.fillRect(position.p.x, position.p.y, 25, 25)
     })
     if (!this.logged) {
-      console.log(entities)
       this.logged = true
     }
   }
@@ -51,7 +50,6 @@ class Physics extends System {
     })
 
     if (!this.logged) {
-      console.log(entities)
       this.logged = true
     }
   }
