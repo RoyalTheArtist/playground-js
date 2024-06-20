@@ -1,4 +1,4 @@
-
+import { useCurves } from "./coding-curves"
 
 const tileSize = {
     width: 24,
@@ -56,6 +56,7 @@ function grabWindowScreen(selector: string, width: number, height: number, zoom:
     canvas.height = height * zoom
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
     ctx.imageSmoothingEnabled = false
+
     return {
         canvas,
         ctx
@@ -150,33 +151,10 @@ function createGrassTileLowDensity(width: number, height: number) {
     return canvas
 }
 
-function main() {
-    const windowScreen = grabWindowScreen('canvas', windowSize.width + 48, windowSize.height + 48, 4)
-
-    const canvas = document.createElement('canvas') as HTMLCanvasElement
-    if (!canvas) {
-        throw new Error('canvas not found')
-    }
-    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-    canvas.width = tileSize.width * grid.width + 6
-    canvas.height = tileSize.height * grid.height + 6
-    ctx.imageSmoothingEnabled = false
-
-
-    ctx.fillStyle = '#100304'
-    ctx.fillRect(3, 3, canvas.width - 6, canvas.height - 6)
-
-    // const grassOneBlade = createGrassBlade(grassOne)
-    // const grassTwoBlade = createGrassBlade(grassTwo)
-    // const grassThreeBlade = createGrassBlade(grassThree)
-
-
-    //ctx.drawImage(grassOneBlade, 0, 3)
-    //ctx.drawImage(grassTwoBlade, 2, 4)
-    //ctx.drawImage(grassThreeBlade, 4, 5)
-    for (let x = 0; x < grid.width; x++) {
-        for (let y = 0; y < grid.height; y++) {
-            if (y === 0 || x === 0 || y === grid.height - 1 || x === grid.width -1) {
+function drawGrassGrid(ctx: CanvasRenderingContext2D, width: number, height: number, tileSize: {width: number, height: number}) {
+    for (let x = 0; x < width; x++) {
+        for (let y = 0; y < height; y++) {
+            if (y === 0 || x === 0 || y === height - 1 || x === width -1) {
                 const grassTile = createGrassTile(tileSize.width, tileSize.height)
 
                 ctx.drawImage(grassTile, x * tileSize.width, y * tileSize.height, tileSize.width, tileSize.height)
@@ -187,18 +165,112 @@ function main() {
             }
         }
     }
-   
-
-    // const grassTile = createGrassTile(tileSize.width, tileSize.height)
-    // const grassTile2 = createGrassTile(tileSize.width, tileSize.height)
-    // const grassTile3 = createGrassTile(tileSize.width, tileSize.height)
-    // const grassTile4 = createGrassTile(tileSize.width, tileSize.height)
-
-    // ctx.drawImage(grassTile, 0, 0)
-    // ctx.drawImage(grassTile2, 24, 0)
-    // ctx.drawImage(grassTile3, 48, 0)
-    // ctx.drawImage(grassTile4, 72, 0)
-    windowScreen.ctx.drawImage(canvas, 0, 0, windowScreen.canvas.width, windowScreen.canvas.height)
 }
 
-main()
+function main() {
+    //const windowScreen = grabWindowScreen('canvas', windowSize.width + 48, windowSize.height + 48, 4)
+    const windowScreen = grabWindowScreen('canvas', 800, 500)
+    const canvas = document.createElement('canvas') as HTMLCanvasElement
+    if (!canvas) {
+        throw new Error('canvas not found')
+    }
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+    //canvas.width = tileSize.width * grid.width + 6
+    //canvas.height = tileSize.height * grid.height + 6
+    canvas.width = 800
+    canvas.height = 500
+
+    
+    const gameSurface = {
+        canvas,
+        ctx
+    }
+
+
+    const waveGenerator = document.querySelector('#generateWave') as HTMLFormElement
+
+    waveGenerator.addEventListener('submit', (e) => {
+
+        e.preventDefault()
+        windowScreen.ctx.clearRect(0, 0, windowScreen.canvas.width, windowScreen.canvas.height)
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        generateWave(ctx)
+        windowScreen.ctx.drawImage(canvas, 0, 0)
+    })
+
+    const circleGenerator = document.querySelector('#generateCircle') as HTMLFormElement
+
+    circleGenerator.addEventListener('submit', (e) => {
+
+        e.preventDefault()
+        windowScreen.ctx.clearRect(0, 0, windowScreen.canvas.width, windowScreen.canvas.height)
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        generateCircle(ctx)
+        windowScreen.ctx.drawImage(canvas, 0, 0)
+    })
+
+    const polygonGenerator = document.querySelector('#generatePolygon') as HTMLFormElement
+
+    polygonGenerator.addEventListener('submit', (e) => {
+
+        e.preventDefault()
+        windowScreen.ctx.clearRect(0, 0, windowScreen.canvas.width, windowScreen.canvas.height)
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        generatePolygon(ctx)
+        windowScreen.ctx.drawImage(canvas, 0, 0)
+    })
+
+    const spiralGenerator = document.querySelector('#generateSpiral') as HTMLFormElement
+
+    spiralGenerator.addEventListener('submit', (e) => {
+
+        e.preventDefault()
+        windowScreen.ctx.clearRect(0, 0, windowScreen.canvas.width, windowScreen.canvas.height)
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        generateSpiral(ctx, 200, 6)
+        windowScreen.ctx.drawImage(canvas, 0, 0)
+    })
+}
+
+function getWaveParameters() {
+    // @ts-ignore
+    const waveParameters = new FormData(document.forms.generateWave)
+    const { amplitude, wavelength, resolution} = Object.fromEntries(waveParameters.entries())
+
+    return {amplitude: amplitude.valueOf() as string, wavelength: wavelength.valueOf() as string, resolution: resolution.valueOf() as string}
+}
+
+function generateWave(ctx: CanvasRenderingContext2D) {
+    const curves = useCurves()
+    
+    const {amplitude, wavelength, resolution} = getWaveParameters()
+    const wave = curves.generateWave(800, parseInt(amplitude), parseInt(wavelength), parseInt(resolution))
+    curves.draw(ctx, wave)
+ 
+}
+
+function generateCircle(ctx: CanvasRenderingContext2D) {
+    const curves = useCurves()
+
+    curves.drawCircle(ctx,  200)
+
+}
+
+function generatePolygon(ctx: CanvasRenderingContext2D) {
+    const curves = useCurves()  
+
+    curves.drawRotatingPolygon(ctx, 6)
+
+}
+
+window.onload = () => {
+
+    main()
+}
+
+function generateSpiral(ctx: CanvasRenderingContext2D, arg1: number, arg2: number) {
+    const curves = useCurves()
+
+    curves.drawSpiral(ctx, 200, 4 )
+}
+
