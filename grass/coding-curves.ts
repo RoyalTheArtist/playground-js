@@ -38,12 +38,6 @@ function generateCircle(x: number, y: number, radius: number = 250) {
     return points
 }
 
-/* 
-    When Radius = 200 and Sides = 6, need to substract -1 from Math.PI to equal appropriate size
-    When Radius = 200 and Sides = 200, need to subtract -2.1 from Math.PI to equal appropriate size
-*/
-
-
 function generateSpiral(x: number, y: number, radius: number = 250, sides: number = 6, rotation: number = 0) {
     const res = Math.PI * 2 / ((radius) * sides)
     const points = [] as Array<Point>
@@ -62,8 +56,6 @@ function generateSpiral(x: number, y: number, radius: number = 250, sides: numbe
 function generatePolygion(x: number, y: number, radius: number = 250, sides: number = 6, rotation: number = 0) {
     const res = Math.PI * 2 / sides
     const points = [] as Array<Point>
-
-    
 
     for (let i = 0; i < Math.PI * 2; i+= res) {
         const x_pos = x + (radius) * Math.cos(i + rotation)
@@ -139,7 +131,18 @@ function useCurves() {
         }
         //ctx.closePath()
         ctx.stroke()
-        
+    }
+    function drawPointsClosed(ctx, points) {
+        ctx.strokeStyle = "red"
+        ctx.lineWidth = 1
+        ctx.beginPath()
+        ctx.moveTo(points[0][0], points[0][1])
+        for (let x = 0; x < points.length; x++) {
+            const [xPos, y] = points[x]
+            ctx.lineTo(xPos, y)
+        }
+        ctx.closePath()
+        ctx.stroke()
     }
  
     function drawCircle(ctx: CanvasRenderingContext2D, radius) {
@@ -148,11 +151,10 @@ function useCurves() {
         drawPoints(ctx, points)
     }
 
-    function drawPolygon(ctx: CanvasRenderingContext2D, radius: number, sides: number, rotation: number = 0) {
+    function drawPolygon(ctx: CanvasRenderingContext2D, radius: number, sides: number, rotation: number = 2) {
         const points = generatePolygion(400, 250, radius, sides, rotation)
 
-        drawPoints(ctx, points)
-
+        drawPointsClosed(ctx, points)
     }
 
     function drawRotatingPolygon(ctx: CanvasRenderingContext2D, sides: number) {

@@ -7,23 +7,66 @@
     <link rel="stylesheet" href="/style.css" />
     <title>Vite + TS</title>
     <style type="text/css">
+        body {
+            padding: 0.5rem;
+            background: rgb(195, 234, 240)
+        }
 
+        .gutter-1 {
+            padding: 0.25rem;
+        }
+        .actions {
+            display: flex;
+
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .actions > * {
+           flex-grow: 1;
+        }
+
+        .actions button {
+            width: 50%;
+            margin-top: auto;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            border: 1px solid rgb(180, 218, 223);
+            padding: 0.5rem;
+        }
+
+        form fieldset {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .main-event {
+            flex-grow: 1
+        }
     </style>
   </head>
   <body>
     <main class="flex">
-        <canvas id="grass" style="border: 1px solid lightgrey;">
+        <canvas id="grass" style="border: 1px solid lightgrey;" width="800" height="500" class="main-event surface">
             I'm sorry you cannot play my game without javascript
-            </canvas>
-            <section class="actions">
-              <h2>Generate Waves</h2>
-              <form id="generateWave">
-      
-                  <select name="waveType" id="waveType">
-                      <option value="sine">Sine Wave</option>
-                     
-                  </select>
-                  <fieldset id="wave-parameters" class="clear-border">
+        </canvas>
+        <div>
+
+        
+        <h2> Generators </h2>
+        <section id="generators" class="actions">
+           
+            <form id="generateWave" class="surface">
+                <h3> Waves</h3>
+                <select name="waveType" id="waveType">
+                    <option value="sine">Sine Wave</option>
+                </select>
+                <fieldset id="wave-parameters" class="clear-border">
                     <label for="amplitude">
                         Amplitude
                     </label>
@@ -36,23 +79,24 @@
                         Resolution
                     </label>
                     <input type="number" name="resolution" id="resolution" value="1">
-                  </fieldset>
-                  <button type="submit">Generate</button>
-                </select>
-              </form>
-              <h2>Generate Circle</h2>
-              <form id="generateCircle">
+                </fieldset>
+                <button type="submit">Generate</button>
+            </form>
+            
+            <form id="generateCircle"  class="surface">
+                <h3>Circle</h3>
                 <fieldset id="circle-parameters" class="clear-border">
                     <label for="radius">
                         Radius
                     </label>
                     <input type="number" name="radius" value="200">
-                  </fieldset>
-                  <button type="submit">Generate</button>
-              </form>
+                </fieldset>
+                <button type="submit">Generate</button>
+            </form>
 
-              <h2>Generate Polygon</h2>
-              <form id="generatePolygon">
+           
+            <form id="generatePolygon"  class="surface">
+                <h3>Polygon</h3>
                 <fieldset id="poly-parameters"  class="clear-border">
                     <label for="radius">
                         Radius
@@ -62,13 +106,16 @@
                         Sides
                     </label>
                     <input type="number" name="sides" value="6">
-                  </fieldset>
-                  
-                  <button type="submit">Generate</button>
-              </form>
+                    <label for="rotation">
+                        Rotation
+                    </label>
+                    <input type="number" name="rotation" value="0">
+                </fieldset>
+                <button type="submit">Generate</button>
+            </form>
 
-              <h2>Generate Spiral</h2>
-              <form id="generateSpiral">
+            <form id="generateSpiral"  class="surface">
+                <h3>Spiral</h3>
                 <fieldset id="poly-parameters"  class="clear-border">
                     <label for="radius">
                         Radius
@@ -78,13 +125,12 @@
                         Sides
                     </label>
                     <input type="number" name="sides" value="6">
-                  </fieldset>
-                  
-                  <button type="submit">Generate</button>
-              </form>
-            </section>
-
+                </fieldset>
+                
+                <button type="submit">Generate</button>
+            </form>
         </section>
+        </div>
     </main>
     
     <script type="module" src="/grass/main.ts"></script>

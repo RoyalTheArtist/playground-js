@@ -16,36 +16,6 @@ const windowSize = {
     height: tileSize.height * grid.height
 }
 
-const grassOne: [number, number, number | null] = [0, 1, 1]
-const grassTwo: [number, number, number | null] = [0, 0, 1]
-const grassThree: [number, number, number | null] = [0, 1, 2]
-
-const colorKeyCode = [
-    '#286a21',
-    '#609034',
-    '#a0b043'
-]
-
-function createGrassBlade(heightMap: [number, number, number | null]) {
-    const canvas = document.createElement('canvas') as HTMLCanvasElement
-    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-    canvas.width = 1
-    canvas.height = 3
-
-    ctx.fillStyle = colorKeyCode[heightMap[0]]
-    ctx.fillRect(0, 2, 1, 1)
-
-    ctx.fillStyle = colorKeyCode[heightMap[1]]
-    ctx.fillRect(0, 1, 1, 1)
-
-    if(heightMap[2] !== null) {
-        ctx.fillStyle = colorKeyCode[heightMap[2]]  
-        ctx.fillRect(0, 0, 1, 1)
-    }
-    return canvas
-
-}
-
 function grabWindowScreen(selector: string, width: number, height: number, zoom: number = 1) {
     const canvas = document.querySelector(selector) as HTMLCanvasElement
     if (!canvas) {
@@ -63,107 +33,47 @@ function grabWindowScreen(selector: string, width: number, height: number, zoom:
     }
 }
 
-class GrassCreator {
-    grass: Map<[number, number, number | null], HTMLCanvasElement> = new Map()
-    constructor() {
 
+type GeneratorType = 'wave' | 'circle' | 'polygon' | 'spiral'
+
+class GeneratorElement {
+    el: HTMLElement
+    constructor(elem: string) {
+        
     }
 
-    add(grass: [number, number, number | null]) {
-        if (!this.grass.has(grass)) {
-            const blade = createGrassBlade(grass)
-            this.grass.set(grass, blade)
-        }
-    }
+    setup() {
 
-    getBlade(grass: [number, number, number | null]) {
-        if (!this.grass.has(grass)) {
-            const blade = createGrassBlade(grass)
-            this.grass.set(grass, blade)
-        }
-        return this.grass.get(grass)
     }
 }
 
-export function generateRandomNumber(min: number, max: number) {
-    return Math.floor(Math.random() * (max-min+ 1) + min)
-}
 
-const grassMaker = new GrassCreator()
+class GeneratorSelector {
+    el: HTMLElement
+    ctx: CanvasRenderingContext2D
+    generators: Map<string, (ctx: CanvasRenderingContext2D, form?: FormData) => void> = new Map()
+    constructor(elem: string, ctx: CanvasRenderingContext2D) {
+        this.el = document.querySelector(elem) as HTMLElement
+        this.ctx = ctx
+        this.setup()
+    }
 
-const GRASS_HIGH_DENSITY = 72
-
-function createGrassTile(width: number, height: number) {
-    const canvas = document.createElement('canvas') as HTMLCanvasElement
-    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-    canvas.width = width
-    canvas.height = height 
-    ctx.imageSmoothingEnabled = false
-    
-    let grass
-    
-    for (let x = 1; x < width - 1; x+=2) {
-        for (let y = 1; y < height - 1; y+=4) {
-            const grassWeight = generateRandomNumber(0, 100)
-            if (grassWeight > 80) {
-                grass = grassMaker.getBlade(grassThree)
-            } else if (grassWeight > 45) {
-                grass = grassMaker.getBlade(grassTwo)
-            } else {
-                grass = grassMaker.getBlade(grassOne)
+    setup() {
+        this.el.addEventListener('submit', (e) => {
+            console.debug('submit', e)
+            const name = (e.target as HTMLFormElement).id
+            const generator = this.generators.get(name)
+            const form = new FormData(e.target as HTMLFormElement)
+            if (generator) {
+                e.preventDefault()
+                this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
+                generator(this.ctx, form)
             }
-
-            const x_offset = generateRandomNumber(-1, 1)
-            const y_offset = generateRandomNumber(-1, 1)
-            ctx.drawImage(grass, x + x_offset, y + y_offset)
-        }
+        })
     }
 
-    return canvas
-}
-
-function createGrassTileLowDensity(width: number, height: number) {
-    const canvas = document.createElement('canvas') as HTMLCanvasElement
-    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-    canvas.width = width
-    canvas.height = height
-    ctx.imageSmoothingEnabled = false
-    
-    let grass
-    
-    for (let x = 0; x < width; x+=5) {
-        for (let y = 0; y < height; y+=6) {
-            const grassWeight = generateRandomNumber(0, 100)
-            if (grassWeight > 80) {
-                grass = grassMaker.getBlade(grassThree)
-            } else if (grassWeight > 45) {
-                grass = grassMaker.getBlade(grassTwo)
-            } else {
-                grass = grassMaker.getBlade(grassOne)
-            }
-
-            const x_offset = generateRandomNumber(-1, 1)
-            const y_offset = generateRandomNumber(-1, 1)
-            ctx.drawImage(grass, x + x_offset, y + y_offset)
-        }
-    }
-
-    return canvas
-}
-
-function drawGrassGrid(ctx: CanvasRenderingContext2D, width: number, height: number, tileSize: {width: number, height: number}) {
-    for (let x = 0; x < width; x++) {
-        for (let y = 0; y < height; y++) {
-            if (y === 0 || x === 0 || y === height - 1 || x === width -1) {
-                const grassTile = createGrassTile(tileSize.width, tileSize.height)
-
-                ctx.drawImage(grassTile, x * tileSize.width, y * tileSize.height, tileSize.width, tileSize.height)
-            } else {
-                const grassTile = createGrassTileLowDensity(tileSize.width, tileSize.height)
-
-                ctx.drawImage(grassTile, x * tileSize.width, y* tileSize.height)
-            }
-        }
+    defineGenerator(name: string, callback: (ctx: CanvasRenderingContext2D, form?: FormData) => void) {
+        this.generators.set(name, callback)
     }
 }
 
@@ -180,53 +90,41 @@ function main() {
     canvas.width = 800
     canvas.height = 500
 
-    
-    const gameSurface = {
-        canvas,
-        ctx
-    }
 
-
-    const waveGenerator = document.querySelector('#generateWave') as HTMLFormElement
-
-    waveGenerator.addEventListener('submit', (e) => {
-
-        e.preventDefault()
+    const generators = new GeneratorSelector('#generators', ctx)
+    generators.defineGenerator("generateWave", (ctx) => {
         windowScreen.ctx.clearRect(0, 0, windowScreen.canvas.width, windowScreen.canvas.height)
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
         generateWave(ctx)
         windowScreen.ctx.drawImage(canvas, 0, 0)
     })
-
-    const circleGenerator = document.querySelector('#generateCircle') as HTMLFormElement
-
-    circleGenerator.addEventListener('submit', (e) => {
-
-        e.preventDefault()
+    generators.defineGenerator("generateCircle", (ctx, form) => {
         windowScreen.ctx.clearRect(0, 0, windowScreen.canvas.width, windowScreen.canvas.height)
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        generateCircle(ctx)
+        let radius = 200
+        if(form?.has('radius')) {
+            radius = parseInt(form.get('radius') as string)
+        }
+        generateCircle(ctx, radius)
         windowScreen.ctx.drawImage(canvas, 0, 0)
     })
-
-    const polygonGenerator = document.querySelector('#generatePolygon') as HTMLFormElement
-
-    polygonGenerator.addEventListener('submit', (e) => {
-
-        e.preventDefault()
+    generators.defineGenerator("generatePolygon", (ctx, form) => {
         windowScreen.ctx.clearRect(0, 0, windowScreen.canvas.width, windowScreen.canvas.height)
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        generatePolygon(ctx)
+        let radius = 200
+        let sides = 6
+        let rotation = 0
+        if (form?.has('radius')) {
+            radius = parseInt(form.get('radius') as string)
+        }
+        if (form?.has('sides')) {
+            sides = parseInt(form.get('sides') as string)
+        }
+        if (form?.has('rotation')) {
+            rotation = parseInt(form.get('rotation') as string)
+        }
+        generatePolygon(ctx, radius, sides, rotation)
         windowScreen.ctx.drawImage(canvas, 0, 0)
     })
-
-    const spiralGenerator = document.querySelector('#generateSpiral') as HTMLFormElement
-
-    spiralGenerator.addEventListener('submit', (e) => {
-
-        e.preventDefault()
+    generators.defineGenerator("generateSpiral", (ctx) => {
         windowScreen.ctx.clearRect(0, 0, windowScreen.canvas.width, windowScreen.canvas.height)
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
         generateSpiral(ctx, 200, 6)
         windowScreen.ctx.drawImage(canvas, 0, 0)
     })
@@ -236,7 +134,6 @@ function getWaveParameters() {
     // @ts-ignore
     const waveParameters = new FormData(document.forms.generateWave)
     const { amplitude, wavelength, resolution} = Object.fromEntries(waveParameters.entries())
-
     return {amplitude: amplitude.valueOf() as string, wavelength: wavelength.valueOf() as string, resolution: resolution.valueOf() as string}
 }
 
@@ -249,17 +146,17 @@ function generateWave(ctx: CanvasRenderingContext2D) {
  
 }
 
-function generateCircle(ctx: CanvasRenderingContext2D) {
+function generateCircle(ctx: CanvasRenderingContext2D, radius: number) {
     const curves = useCurves()
 
-    curves.drawCircle(ctx,  200)
+    curves.drawCircle(ctx,  radius)
 
 }
 
-function generatePolygon(ctx: CanvasRenderingContext2D) {
+function generatePolygon(ctx: CanvasRenderingContext2D, radius: number, sides: number, rotation: number = 2) {
     const curves = useCurves()  
 
-    curves.drawRotatingPolygon(ctx, 6)
+    curves.drawPolygon(ctx, radius, sides, rotation)
 
 }
 

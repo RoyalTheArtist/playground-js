@@ -8,3 +8,7 @@
 .flex {
   display: flex;
 }
+
+button {
+  padding: 0.5rem;
+}

@@ -12,3 +12,15 @@
   .clear-border {
     border: 0;
   }
+
+  button {
+    padding: .25rem 0.5rem;
+  }
+
+  .surface {
+    background: rgb(243, 243, 243)
+  }
+
+  .mt-4 {
+    margin-top: 1rem;
+  }
