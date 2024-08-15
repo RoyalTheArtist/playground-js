@@ -14,6 +14,7 @@ export class Engine {
 
     setScreen(screen: BaseScreen) {
         this.activeScreen = screen
+        this.activeScreen.engine = this
     }
 
     update(timeStamp: number) {

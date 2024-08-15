@@ -31,7 +31,6 @@ class Engine {
   update(delta: number) {
 
     this.ecs.update(delta)
-
   }
 
   draw(ctx: CanvasRenderingContext2D) {
