@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+  </head>
+  <body>
+    <main class="mapmaker-grid" id="mapmaker">
+        <menu class="grid-menu">
+            <section id="tileset-loader" class="flex-col">
+                <h2>Tileset Info</h2>
+                <header>
+                    <label for="loadTiles" ><button type="button" class="load-tileset">Load Tiles</button>
+                    <input type="file" name="loadTiles" accept=".json,text/json">
+                </header>
+                <section class="properties">
+                    <h3>Details</h3>
+                    <label for="width">Width
+                        <input type="number" value="10" name="width">
+                    </label>
+                    <label for="height">Height
+                        <input type="number" value="10" name="height">
+                    </label>     
+                </section>
+                <div class="preview"></div>
+            </section>
+        </menu>
+        <section id="map" class="bg-black grid-map" oncontextmenu="return false">
+           
+        </section>
+        <section id="map-info">
+            <button type="button" class="save-map" onclick="mapmaker.saveMap()">Save Map</button>
+            <button type="button" class="load-map" onclick="mapmaker.loadMap()">Load Map</button>
+        </section>
+        <section id="tileset" class="grid-tiles">
+            <div id="tile-info" class="tile-info">
+                
+                <div class="active-tile">
+                    <header class="flex align-end gap-xs">
+                        <div class="tile" style="background-color: white"></div>
+                        <label for="name">Tile Name: 
+                            <input type="text" name="name" value="white">
+                        </label>
+                    </header>
+                    <section class="properties flex-col gap-xs">
+                        <h3>Properties</h3>
+                        <label for="passable" class="checkbox-label">
+                            Passable 
+                            <input type="checkbox" name="passable">
+                        </label>
+                        <label for="passable" class="checkbox-label">
+                            Transparent
+                            <input type="checkbox" name="transparent"></label>
+                    </section>
+                </div>
+            </div>
+            <div class="tiles"></div>
+        </section>
+    </main>
+
+    
+    <style>
+
+    </style>
+    <script type="module" src="/src/mapmaker.ts"></script>
+  </body>
+</html>
