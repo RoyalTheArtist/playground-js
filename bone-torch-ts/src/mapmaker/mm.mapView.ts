@@ -76,6 +76,12 @@ export class MapView extends BaseAppComponent {
 
         drawMouse(this.mouse, this._screen)
     }
+
+    public resize() {
+        this.width = this._el.clientWidth
+        this.height = this._el.clientHeight
+        this._screen?.setResolution(this.width, this.height);
+    }
 }
 
 function drawMouse(mouse: MouseHandler, screen: Screen) {

@@ -133,3 +133,7 @@ function main() {
 window.onload = () => {
     main()
 }
+
+window.addEventListener('resize', () => {
+    mapMaker.mapView.resize()
+})
