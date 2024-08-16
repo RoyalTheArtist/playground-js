@@ -10,10 +10,15 @@
     height: 100vh;
 }
 
+
+
 .mapmaker-grid {
     display: grid;
-    grid-template-columns: [menu] 1fr [main]3fr [properties] 1fr [end];
-    grid-template-rows: [row1] 4fr [tiles] 2fr [end];
+    grid-template-columns: [menu] 325px [main]3fr [properties] 325px[end];
+    grid-template-rows: 932px 1fr;
+    grid-template-areas: 
+    'menu main  properties'
+    'tiles tiles tiles';
     width: 100vw;
     height: 100vh;
 
@@ -30,13 +35,21 @@
     padding: 0.75rem;
 }
 
+.grid-map {
+    grid-area: main;
+}
+
 .grid-tiles {
-    grid-column-start: menu;
-    grid-column-end: end;
+    grid-area: tiles;
+    // grid-column-start: menu;
+    // grid-column-end: end;
+
+    // grid-row-start: 3;
+    // grid-row-end: 4;
 
     display: grid;
     grid-template-columns: [active] 250px [active-end] 1fr [end];
-    grid-template-rows: 1fr;
+    grid-template-rows: 32px 42px 1fr;
     gap: 4px;
     padding: 12px;
     
@@ -79,11 +92,9 @@
 
     .tiles {
         display: grid;
-        grid-template-columns: [active] 1fr [end] repeat(20, 1fr);
-        grid-template-rows: repeat(5, 1fr);
+        grid-template-columns:  repeat(25, 84px);
+        grid-template-rows: repeat(3, 84px);
         gap: 4px;
-        padding: 6px;
-
         grid-column-start: active-end;
         grid-column-end: end;
 
@@ -91,6 +102,7 @@
             width: 100%;
             aspect-ratio: 1;
             border: 1px solid black;
+            max-width: 84px;
         }
     }
 }

@@ -35,10 +35,18 @@
             <button type="button" class="load-map" onclick="mapmaker.loadMap()">Load Map</button>
         </section>
         <section id="tileset" class="grid-tiles">
+            <h3>Tile Details</h3>
+            <h3>Tile Set</h3>
+            <div></div>
+            <div class="tools">
+                <button type="button" class="add-tile">Paint</button>
+                <button type="button" class="fill-tile">Fill</button>
+            </div>
             <div id="tile-info" class="tile-info">
-                
                 <div class="active-tile">
+
                     <header class="flex align-end gap-xs">
+                        
                         <div class="tile" style="background-color: white"></div>
                         <label for="name">Tile Name: 
                             <input type="text" name="name" value="white">
