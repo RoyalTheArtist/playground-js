@@ -5,10 +5,21 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + TS</title>
+
+    <style>
+
+      #game {
+        width: 800px;
+        height: 600px;
+      }
+    </style>
   </head>
   <body>
-    <div id="app">Welcome to the bone torch</div>
-    <canvas id="game" style="border: 1px solid lightgrey;"></canvas>
+    <main class="flex-col align-center">
+      <div id="app">Welcome to the bone torch</div>
+      <canvas id="game" style="border: 1px solid lightgrey;"></canvas>
+    </main>
+ 
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

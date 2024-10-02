@@ -1,0 +1,118 @@
+%grid {
+    --grid-padding: 0;
+    container-type: inline-size;
+    display: grid;
+    grid-template-rows: auto;
+    gap: var(--grid-gap);
+
+    .col {
+        grid-column-start: 1;
+        grid-column-end: end;
+    }
+
+    .col-2 {
+        grid-column: span 2;
+    }
+
+    .col-3 {
+        grid-column: span 3;
+    }
+
+    .col-half {
+        grid-column: span 3;    
+    }
+}
+
+.gap-xs {
+    --grid-gap: 0.25rem;
+}
+
+.gap-sm {
+    --grid-gap: 0.5rem;
+}
+
+.gap-md {
+    --grid-gap: 1rem;
+}
+
+.grid-twelve {
+    @extend %grid;
+    grid-template-columns: repeat(12, 1fr);
+    
+}
+
+.grid-six {
+    @extend %grid;
+    grid-template-columns: repeat(6, 1fr);
+    
+}
+
+.grid-three {
+    @extend %grid;
+    grid-template-columns: repeat(3, 1fr);
+   
+}
+
+.grid-auto {
+    @extend %grid;
+    --grid-columns: 3;
+    grid-template-columns: repeat(var(--grid-columns), 1fr);
+}
+
+@container (width > 250px) {
+    .grid-auto {
+        --grid-columns: 6;
+
+        .col-half {
+            grid-column: span 6;
+        }
+    }
+}
+
+@container (width > 400px) {
+    .grid-auto {
+        --grid-columns: 9;
+    }
+}
+
+@container (width > 800px) {
+    .grid-auto {    
+        --grid-columns: 12;
+    }
+}
+
+.expansion-panel {
+    max-height: 4rem;
+    transition: max-height 0.25s ease-in-out;
+    &[open] {
+        max-height: 50rem;
+    }
+    
+    .content {
+        padding: 0 1rem 1rem; 
+    }
+}
+
+hr {
+    &.florid {
+        overflow: visible;
+        padding: 0;
+        border: none;
+        border-top: medium double #333;
+        color: #333;
+        text-align: center;
+        line-height: 1;
+        margin-top: 0.5rem;
+        max-height: 1rem;
+
+        &:after {
+            content: "§";
+            display: inline;
+            position: relative;
+            top: -0.7em;
+            font-size: 1.5em;
+            padding: 0 0.25em;
+            background: white;
+        }
+    }
+}

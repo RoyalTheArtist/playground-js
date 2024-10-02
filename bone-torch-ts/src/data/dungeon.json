@@ -73,6 +73,11 @@
             "passable": true,
             "transparent": false,
             "sprite": "floor"
+        },
+        "water": {
+            "passable": false,
+            "transparent": true,   
+            "sprite": "water"
         }
         
     }

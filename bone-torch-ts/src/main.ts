@@ -1,6 +1,9 @@
 import './style.scss'
-import { createMap, drawMap } from './map'
-import { Screen, Surface } from './graphics'
+import { createMap, drawMap } from './maps'
+import { Viewport, Surface } from './graphics'
+import { Engine } from './engine/engine'
+import { GameScreen, MainMenu } from './screens'
+
 
 // 0 = floor
 // 1 = wall
@@ -30,19 +33,12 @@ const mapDataTwo = [
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 ]
 
-
-
 function main() {
-  const screen = new Screen("#game")
-  screen.setResolution(640, 360)
-  console.log(screen.resolution)
-
-  const map = createMap(mapDataTwo, 10, 10)
-  console.log(map)
-
-  const surface = new Surface(640, 360)
-  drawMap(map, surface)
-  screen.render(surface.canvas, 0, 0)
+  const gameSurface = new Surface(800, 600, "#game")
+  const viewport = new Viewport(gameSurface)
+  const engine = new Engine(viewport)
+  engine.setScreen(new GameScreen())
+  engine.start()
 }
 
 window.onload = () => {

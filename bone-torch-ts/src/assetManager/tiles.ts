@@ -1,5 +1,5 @@
 import { Texture } from "../graphics"
-import { Tile } from "../map"
+import { Tile } from "../maps/map"
 
 
 const allTileSets = new Map<string, TileSet>()

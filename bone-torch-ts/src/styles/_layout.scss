@@ -1,0 +1,21 @@
+// layout
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.flex {
+    display: flex;
+}
+
+.align-end {
+    align-items: end;
+}
+
+.gap-xs {
+    gap: 0.25rem;
+}

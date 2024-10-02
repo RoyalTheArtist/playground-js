@@ -1,0 +1,62 @@
+.grid-tiles {
+    grid-area: tiles;
+
+    display: grid;
+    grid-template-columns: [active] 250px [active-end] 1fr [end];
+    grid-template-rows: 32px 42px 1fr;
+    gap: 4px;
+    padding: 0 12px;
+    
+    .tile {
+        width: 100%;
+        aspect-ratio: 1;
+        border: 1px solid black;
+        img {
+            width: 100%;
+            height: 100%;
+            image-rendering: pixelated;
+        }
+
+    }
+
+
+    .tile-info {
+        grid-column-start: active;
+        grid-column-end: active-end;
+
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        header {
+            input[type="file"] {
+                display: none;
+            }    
+        }
+    
+        .active-tile {
+            .tile {
+                max-width: 60px;
+                max-height: 60px;
+            }
+        }
+
+       
+    }
+
+    .tiles {
+        display: grid;
+        grid-template-columns:  repeat(auto-fit, 84px);
+        grid-template-rows: repeat(3, 84px);
+        gap: 4px;
+        grid-column-start: active-end;
+        grid-column-end: end;
+
+        > * {
+            width: 100%;
+            aspect-ratio: 1;
+            border: 1px solid black;
+            max-width: 84px;
+        }
+    }
+}

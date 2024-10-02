@@ -1,5 +1,5 @@
-import { Screen, Surface } from "../graphics"
-import { Blank_Tile, GameMap, Tile } from "../map"
+import { Viewport, Surface } from "../graphics"
+import { Blank_Tile, GameMap, Tile } from "../maps/map"
 import { BaseAppComponent } from "../app"
 import { MapMaker } from "../mapmaker"
 import { MouseHandler } from "../mouse"
@@ -11,7 +11,7 @@ export class MapView extends BaseAppComponent {
     _el: HTMLElement
     width: number
     height: number
-    _screen: Screen | null = null
+    _screen: Viewport | null = null
     mouse: MouseHandler
     activeTile: Tile | null = null
     constructor(parent: MapMaker, elem: string) {
@@ -29,11 +29,11 @@ export class MapView extends BaseAppComponent {
     }
 
     public init() {
-        this._screen = new Screen()
+        this._screen = new Viewport()
 
-        this.mouse?.init(this._screen.canvas)
+        this.mouse?.init(this._screen.surface.canvas)
 
-        this._el.appendChild(this._screen.canvas)
+        this._el.appendChild(this._screen.surface.canvas)
 
         this._screen.setResolution(this.width, this.height);
 
@@ -84,13 +84,13 @@ export class MapView extends BaseAppComponent {
     }
 }
 
-function drawMouse(mouse: MouseHandler, screen: Screen) {
+function drawMouse(mouse: MouseHandler, screen: Viewport) {
     if (!mouse.available) return
     
     const coords = mouse.lockedPos
 
-    screen.context.strokeStyle = 'red'
-    screen.context.strokeRect(coords.x * 20, coords.y * 20, 20, 20)
+    screen.surface.context.strokeStyle = 'red'
+    screen.surface.context.strokeRect(coords.x * 20, coords.y * 20, 20, 20)
 }
 
 function drawGrid(width: number, height: number, tileWidth: number, tileHeight: number): HTMLCanvasElement {

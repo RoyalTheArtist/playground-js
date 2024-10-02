@@ -4,6 +4,7 @@ abstract class App {
 }
 
 abstract class AppComponent  {
+    abstract parent: App
     abstract init(): void  
 }
 
@@ -13,17 +14,12 @@ export class BaseApp extends App {
 }
 
 export class BaseAppComponent extends AppComponent {
-    private _parent: App
-    constructor(parent: App) {
+    parent: BaseApp
+    constructor(parent: BaseApp) {
         super()
-        this._parent = parent
+        this.parent = parent
     }
-
     init(): void {}
     render(): void { }
-    
-    public get parent(): App {
-        return this._parent
-    }
 }
 

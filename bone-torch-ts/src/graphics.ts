@@ -1,85 +1,90 @@
 export class Surface {
-    width: number
-    height: number
-    canvas: HTMLCanvasElement
-    context: CanvasRenderingContext2D
-    constructor(width: number, height: number) {
-      this.width = width
-      this.height = height
-  
+  width: number
+  height: number
+  canvas: HTMLCanvasElement
+  context: CanvasRenderingContext2D
+  constructor(width: number, height: number, el: string = "") {
+    this.width = width
+    this.height = height
+
+    if (el) {
+      this.canvas = document.querySelector(el) as HTMLCanvasElement
+    } else {
       this.canvas = document.createElement("canvas")
-      this.canvas.width = width
-      this.canvas.height = height
-      this.context = this.canvas.getContext("2d") as CanvasRenderingContext2D
     }
-  
-    public clear() {
-      this.context.clearRect(0, 0, this.width, this.height)
-    }
-  
-    public drawRect(x: number, y: number, width: number, height: number, color: string = "red") {
-      this.context.fillStyle = color
-      this.context.fillRect(x, y, width, height)
-    }
-    
-    public draw(image: HTMLImageElement, x: number, y: number) {
-        this.context.drawImage(image, x, y)
-    }
+    this.context = this.canvas.getContext("2d") as CanvasRenderingContext2D
+    this.setResolution(width, height)
   }
+
+  public setResolution(width: number, height: number) {
+    this.canvas.width = width
+    this.canvas.height = height
+  }
+
+  public clear() {
+    this.context.clearRect(0, 0, this.width, this.height)
+  }
+
+  public drawRect(x: number, y: number, width: number, height: number, color: string = "red") {
+    this.context.fillStyle = color
+    this.context.fillRect(x, y, width, height)
+  }
+
+  public draw(image: HTMLImageElement | HTMLCanvasElement, x: number, y: number) {
+      this.context.drawImage(image, x, y)
+  }
+
+  public drawAlpha(img: HTMLImageElement | HTMLCanvasElement, x: number, y: number, zoom: number, alpha: number) {
+    this.context.save()
+    this.context.globalAlpha = 1-alpha
+    this.context.drawImage(img, x, y, img.width * zoom, img.height * zoom)
+    this.context.restore()
+  }
+
+  public drawText(text: string, x: number, y: number, color: string = "black", size: number = 16) {
+    this.context.fillStyle = color
+    this.context.textBaseline = "top"
+    this.context.textAlign = "left"
+    this.context.font = `${size}px sans-serif`
+    this.context.fillText(text, x, y) 
+  }
+}
   
   type Dimensions = {
     width: number
     height: number
   }
   
-  export class Screen {
-    private _canvas: HTMLCanvasElement
-    private _ctx: CanvasRenderingContext2D
+  export class Viewport {
+    private _surface: Surface
     resolution: Dimensions
-    constructor(el: string = "#game") {
-      this._canvas = document.querySelector(el) as HTMLCanvasElement
-      if(!this._canvas) {
-        this._canvas = document.createElement("canvas")
-      }
-      this._ctx = this._canvas.getContext('2d') as CanvasRenderingContext2D
-  
+    constructor(surface: Surface) {
+      this._surface = surface
       this.resolution = {
-        width: this._canvas.width,
-        height: this._canvas.height
+        width: this.surface.canvas.width,
+        height: this.surface.canvas.height
       }
     }
-  
-    public get canvas(): HTMLCanvasElement {
-      return this._canvas
+
+    public get surface(): Surface {
+      return this._surface
     }
   
-    public get context(): CanvasRenderingContext2D {
-      return this._ctx
-    }
   
     public setResolution(width: number, height: number) {
-      this._canvas.width = width
-      this._canvas.height = height
+      this._surface.setResolution(width, height)
   
       this.resolution = {
-        width: this._canvas.width,
-        height: this._canvas.height
+        width: width,
+        height: height
       }
-    }
-  
-    public clear() {
-      this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height)
-    }
-  
-    public render(img: HTMLImageElement | HTMLCanvasElement, x: number, y: number) {
-      this._ctx.drawImage(img, x, y)
     }
 
     public drawAlpha(img: HTMLImageElement | HTMLCanvasElement, x: number, y: number, zoom: number, alpha: number) {
-      this.context.save()
-      this.context.globalAlpha = 1-alpha
-      this.context.drawImage(img, x, y, img.width * zoom, img.height * zoom)
-      this.context.restore()
+      this.surface.context.save()
+      this.surface.context.globalAlpha = 1-alpha
+      this.surface.context.drawImage(img, x, y, img.width * zoom, img.height * zoom)
+      this.surface.context.restore()
     }
   }
   
