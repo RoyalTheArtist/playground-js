@@ -1,11 +1,11 @@
-import { Actor } from "../../actors"
+import { Actor, PlayerAI } from "../../actors"
 import { Entity } from "../../ecs"
 import { InputManager, ActionMapping } from "../../input"
 import { createMap, GameMap } from "../../maps"
 import { Vector2D } from "../../utils"
 import { GameInputHandler, InputHandler } from "../handlers"
 import { BaseScreen } from "./base"
-import { ActionQueue, MoveAction } from "../../actors/actions"
+import { ActionQueue, MoveAction, NoAction } from "../../actors/actions"
 
 // 1 = wall
 const mapDataOne = [
@@ -49,6 +49,10 @@ export class GameScreen extends BaseScreen  {
     private _map: GameMap
     private _entities: Set<Entity> = new Set()
     private _player: Actor
+    
+    private _activeActors: Set<Actor> = new Set()
+    private _currentTurn: Actor | null = null
+    private _tookTurns: Set<Actor> = new Set()
 
     constructor() {
         super()
@@ -58,8 +62,10 @@ export class GameScreen extends BaseScreen  {
 
         this._player = new Actor(new Vector2D(5, 5))
         this._player.initialize()
+        this._player.ai = new PlayerAI()
         this._entities.add(this._player)
 
+        this._activeActors.add(this._player)
     }
 
     public get map(): GameMap {
@@ -69,11 +75,13 @@ export class GameScreen extends BaseScreen  {
         const inputs = InputManager.getInputs(gameScreenMapping)
         const result = this._handler.handleInput(inputs, delta)
 
+        
         if (result instanceof MoveAction) {
-            ActionQueue.addAction(this._player, result, 175)
+            this._player.ai.update(result)
         }
 
         this.map.update(delta)
+        this.takeTurns()
 
         for (const entity of this._entities) {
             entity.update(delta)
@@ -82,6 +90,29 @@ export class GameScreen extends BaseScreen  {
         ActionQueue.processActions(delta)
     }
 
+    public takeTurns() {
+        if (this._activeActors.size === 0) {
+            if (this._tookTurns.size > 0) {
+                this._activeActors = new Set(this._tookTurns)
+                this._tookTurns.clear()
+            }
+            return
+        }
+        if (this._currentTurn === null) {
+            const [currentTurn] = this._activeActors
+            this._currentTurn = currentTurn
+            this._tookTurns.add(currentTurn)
+            this._activeActors.delete(currentTurn)
+        }
+
+        const action = this._currentTurn.ai.perform(this._currentTurn)
+        if (action instanceof NoAction) {
+            return
+        }
+
+        ActionQueue.addAction(this._currentTurn, action, 175)
+        this._currentTurn = null
+    }
     
 
     render() {}

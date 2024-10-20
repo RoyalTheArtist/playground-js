@@ -1,6 +1,7 @@
 import { Entity, IComponent } from "../ecs";
 import { SurfaceLayer } from "../render";
 import { Color, Vector2D } from "../utils";
+import { Action, NoAction } from "./actions";
 
 class ActorDrawComponent implements IComponent {
     public parent: Actor
@@ -38,7 +39,30 @@ class ActorLocomotionComponent implements IComponent {
     }
 }
 
+export abstract class AI {
+    public abstract update(action: Action): void
+    public abstract perform(entity: Actor): Action
+}
+
+export class PlayerAI extends AI {
+    private _nextAction: Action | null = null
+
+    public update(action: Action) {
+        this._nextAction = action
+    }
+    public perform(): Action {
+        if (this._nextAction) {
+            const action = this._nextAction
+            this._nextAction = null
+            return action
+        }
+        return new NoAction()
+    }
+}
+
+
 export class Actor extends Entity {
+    public ai: AI
     constructor(public position: Vector2D) {
         super();
     }
