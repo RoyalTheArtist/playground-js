@@ -1,12 +1,18 @@
+import { Actor } from "../actors"
 import { Entity } from "../ecs"
 import { IRender, IUpdate } from "../engine"
 import { Surface } from "../graphics"
-import { createMap, drawMap, GameMap } from "../maps/map"
+import { createMap, drawMap, FLOOR_TILE, GameMap, WALL_TILE } from "../maps"
+import { Vector2D } from "../utils"
 
 
 abstract class InputHandler {
 
 }
+
+class MainMenuInputHandler extends InputHandler {
+}
+
 
 export abstract class BaseScreen implements IUpdate, IRender {
     abstract update(delta: number): void
@@ -60,38 +66,32 @@ const mapDataOne = [
     0, 1, 1, 1, 1, 1, 1, 1, 1, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   ]
-  
-  
-const mapData = {
-    tileAtas: [
-        [0, FLOOR_TILE],
-        [1, WALL_TILE],
-    ]
-}
 
-
-
-export class GameScreen extends BaseScreen {
+export class GameScreen extends BaseScreen  {
     private _map: GameMap
     private _entities: Set<Entity> = new Set()
 
     constructor() {
         super()
         this._map = createMap(mapDataOne, 10, 10)
+        this._map.initialize()
         this._map.process()
+
+        const player = new Actor(new Vector2D(5, 5))
+        player.initialize()
+        this._entities.add(player)
     }
 
     public get map(): GameMap {
         return this._map
     }
     update(_delta: number) {
-        console.log('game screen')
+        this.map.update(_delta)
+
+        for (const entity of this._entities) {
+            entity.update(_delta)
+        }
     }
 
-    render(surface: Surface) {
-        surface.clear()
-        surface.drawRect(0, 0, 800, 600, 'black')
-
-        drawMap(this.map, surface)
-    }
+    render() {}
 }

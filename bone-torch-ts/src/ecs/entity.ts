@@ -1,18 +1,18 @@
 import { IComponent } from "./component.h"
-import { IUpdate } from "../engine/update.h"
+import { IInitialize, IRender, IUpdate } from "../engine/update.h"
+import { Vector2D } from "../utils"
 
-type constr<T> = new(...args: unknown[]) => T
+type constr<T> = { new(...args: unknown[]): T }
 
-export class Vector2D {
-    constructor(public x: number = 0, public y: number = 0) { }
-}
 
 export class Rectangle {
     constructor(public start: Vector2D, public end: Vector2D) { }
 }
 
-export abstract class Entity implements IUpdate { 
+
+export abstract class Entity implements IUpdate, IInitialize { 
     protected _components: Set<IComponent> = new Set()
+    protected _renderComponents: Set<IComponent> = new Set()
 
     public get components(): Set<IComponent> {
         return this._components
@@ -20,6 +20,10 @@ export abstract class Entity implements IUpdate {
 
     public addComponent(component: IComponent) {
         this._components.add(component)
+
+        if ('render' in component) {
+            this._renderComponents.add(component)
+        }
         component.parent = this
     }
 
@@ -55,8 +59,6 @@ export abstract class Entity implements IUpdate {
             component.update(delta)
         }
     }
-}
 
-export class Actor extends Entity { 
-    public position: Vector2D = new Vector2D()
+    public initialize() {}
 }

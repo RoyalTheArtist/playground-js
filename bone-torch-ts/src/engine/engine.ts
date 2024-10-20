@@ -1,14 +1,23 @@
-import { Viewport } from "../graphics";
+import { SurfaceLayer, Viewport } from "../render";
 import { BaseScreen } from "../screens";
-import { IRender, IUpdate } from "./update.h";
+import { Color } from "../utils";
+import { IUpdate } from "./update.h";
 
-export class Engine implements IUpdate, IRender {
+export class Engine implements IUpdate {
     protected _screen: BaseScreen | null = null
     protected _lastUpdate: number = 0
-    protected _viewport: Viewport
-
+    private _viewport: Viewport
+    
     constructor(viewport: Viewport) {
         this._viewport = viewport
+    }
+
+    public get viewport(): Viewport {
+        return this._viewport
+    }
+
+    public get screen(): BaseScreen | null {
+        return this._screen
     }
 
     start() {
@@ -20,21 +29,16 @@ export class Engine implements IUpdate, IRender {
     }
 
     update() {
+        SurfaceLayer.clear()
+        SurfaceLayer.background.drawRect(0, 0, 800, 600, Color.fromString('black'))
         const delta = Date.now() - this._lastUpdate
         
-        if (this._screen) {
-            this._screen.update(delta)
-        }
+        this.screen?.update(delta)
+        this.viewport.draw()
 
         window.requestAnimationFrame(() => {
             this._lastUpdate = Date.now()
-            this.update()
-            this.render()
+            this.update()   
         })
-    }
-
-    render() {
-        if (!this._screen) return
-        this._screen.render(this._viewport.surface)
     }
 }
