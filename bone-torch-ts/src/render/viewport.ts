@@ -19,8 +19,14 @@ export class Viewport implements IInitialize {
   
     public draw() {
       this.surface.clear()
+      this.surface.drawRect(0, 0, 800, 600, Color.fromString('black'))
       this.surface.draw(SurfaceLayer.background.canvas, 0, 0)
       this.surface.draw(SurfaceLayer.foreground.canvas, 0, 0)
+    }
+  
+    public clear() {
+      SurfaceLayer.background.clear()
+      SurfaceLayer.foreground.clear()
     }
 
     public setResolution(width: number, height: number) {

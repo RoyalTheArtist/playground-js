@@ -30,6 +30,7 @@ export class Engine implements IUpdate {
     }
 
     update(timePassed: number) {
+        this.viewport.clear()
         const delta = timePassed - this._lastUpdate
         this._lastUpdate = timePassed
         this.screen?.update(delta)

@@ -1,10 +1,8 @@
 import { Actor } from "../../actors"
 import { Entity } from "../../ecs"
-import { KeyboardManager } from "../../input"
 import { InputManager, ActionMapping } from "../../input"
 import { createMap, GameMap } from "../../maps"
-import { SurfaceLayer } from "../../render"
-import { Color, Vector2D } from "../../utils"
+import { Vector2D } from "../../utils"
 import { GameInputHandler, InputHandler } from "../handlers"
 import { BaseScreen } from "./base"
 import { ActionQueue, MoveAction } from "../../actors/actions"
@@ -71,20 +69,20 @@ export class GameScreen extends BaseScreen  {
         const inputs = InputManager.getInputs(gameScreenMapping)
         const result = this._handler.handleInput(inputs, delta)
 
-        SurfaceLayer.clear()
-        SurfaceLayer.background.drawRect(0, 0, 800, 600, Color.fromString('black'))
-        
-        this.map.update(delta)
-
         if (result instanceof MoveAction) {
             ActionQueue.addAction(this._player, result, 175)
         }
-        ActionQueue.processActions(delta)
+
+        this.map.update(delta)
 
         for (const entity of this._entities) {
             entity.update(delta)
         }       
+
+        ActionQueue.processActions(delta)
     }
+
+    
 
     render() {}
 }
