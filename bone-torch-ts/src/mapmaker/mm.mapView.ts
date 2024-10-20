@@ -1,5 +1,5 @@
-import { Viewport, Surface } from "../graphics"
-import { Blank_Tile, GameMap, Tile } from "../maps/map"
+import { Viewport, Surface } from "../render"
+import { Blank_Tile, GameMap, Tile } from "../maps"
 import { BaseAppComponent } from "../app"
 import { MapMaker } from "../mapmaker"
 import { MouseHandler } from "../mouse"

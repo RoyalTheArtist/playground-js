@@ -1,5 +1,5 @@
 import { IInitialize } from "../engine"
-import { Vector2D } from "../utils"
+import { Color, Vector2D } from "../utils"
 import { Surface, SurfaceLayer } from "./surface"
 
 export class Viewport implements IInitialize {
@@ -18,7 +18,7 @@ export class Viewport implements IInitialize {
     }
   
     public draw() {
-        this.surface.clear()
+      this.surface.clear()
       this.surface.draw(SurfaceLayer.background.canvas, 0, 0)
       this.surface.draw(SurfaceLayer.foreground.canvas, 0, 0)
     }
@@ -32,6 +32,10 @@ export class Viewport implements IInitialize {
       this.surface.context.globalAlpha = 1-alpha
       this.surface.context.drawImage(img, x, y, img.width * zoom, img.height * zoom)
       this.surface.context.restore()
+    }
+  
+  public drawBackground(color: Color = new Color(0, 0, 0)) {
+      this.surface.drawRect(0, 0, this.surface.width, this.surface.height, color)
     }
   }
   

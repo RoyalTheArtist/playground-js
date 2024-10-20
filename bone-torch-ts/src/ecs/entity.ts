@@ -60,5 +60,9 @@ export abstract class Entity implements IUpdate, IInitialize {
         }
     }
 
-    public initialize() {}
+    public initialize() {
+        for (const component of this._components) {
+            component.initialize()
+        }
+    }
 }

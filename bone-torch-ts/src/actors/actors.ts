@@ -7,7 +7,6 @@ class ActorDrawComponent implements IComponent {
     constructor() { }
 
     public get center() {
-        const position = this.parent.position
         return new Vector2D(this.screenPosition.x - 16, this.screenPosition.y - 16)
     }
 
@@ -48,5 +47,9 @@ export class Actor extends Entity {
         this.addComponent(new ActorLocomotionComponent());
         this.addComponent(new ActorDrawComponent());
         super.initialize();
+    }
+
+    public moveTo(direction: Vector2D) {
+        this.position = new Vector2D(this.position.x + direction.x, this.position.y + direction.y)
     }
 }

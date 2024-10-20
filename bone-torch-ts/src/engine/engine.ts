@@ -1,8 +1,8 @@
-import { SurfaceLayer, Viewport } from "../render";
+import { Viewport } from "../render";
 import { BaseScreen } from "../screens";
-import { Color } from "../utils";
 import { IUpdate } from "./update.h";
 
+import { KeyboardManager } from "../input";
 export class Engine implements IUpdate {
     protected _screen: BaseScreen | null = null
     protected _lastUpdate: number = 0
@@ -21,24 +21,22 @@ export class Engine implements IUpdate {
     }
 
     start() {
-        window.requestAnimationFrame(() => this.update())
+        new KeyboardManager()
+        window.requestAnimationFrame(() => this.update(performance.now()))
     }
 
     setScreen(screen: BaseScreen) {
         this._screen = screen
     }
 
-    update() {
-        SurfaceLayer.clear()
-        SurfaceLayer.background.drawRect(0, 0, 800, 600, Color.fromString('black'))
-        const delta = Date.now() - this._lastUpdate
-        
+    update(timePassed: number) {
+        const delta = timePassed - this._lastUpdate
+        this._lastUpdate = timePassed
         this.screen?.update(delta)
         this.viewport.draw()
 
-        window.requestAnimationFrame(() => {
-            this._lastUpdate = Date.now()
-            this.update()   
+        window.requestAnimationFrame((timeStamp) => {
+            this.update(timeStamp)
         })
     }
 }
