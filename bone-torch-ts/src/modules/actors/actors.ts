@@ -9,7 +9,7 @@ import { Item } from "@/modules/items";
 const TILE_SIZE = Settings.tiles.size.x
 const ENTITY_RADIUS = (TILE_SIZE - 2) / 2
 
-class ActorDrawComponent extends Component {
+export class ActorDrawComponent extends Component {
     public parent: Actor
 
     public get center() {

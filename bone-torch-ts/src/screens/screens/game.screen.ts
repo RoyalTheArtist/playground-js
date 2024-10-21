@@ -4,7 +4,7 @@ import { BaseScreen } from "bt-engine"
 import { Entity, System } from "@/engine/ecs"
 import { InputManager } from "@/engine/input"
 
-import { Actor, AI, ActionQueue, MoveAction } from "@/modules/actors"
+import { Actor, AI, ActionQueue, MoveAction, DrawEntitySystem } from "@/modules/actors"
 import { createMap, GameMap } from "@/modules/map"
 import { TileDrawSystem } from "@/modules/tiles"
 
@@ -44,6 +44,7 @@ const mapDataTwo = [
 
 
 const tileDrawSystem = new TileDrawSystem()
+const drawEntitySystem = new DrawEntitySystem()
 
 class TurnSystem extends System {
     public componentsRequired = new Set([AI])
@@ -103,13 +104,17 @@ export class GameScreen extends BaseScreen  {
         turnSystem.query(new Set(this._activeActors))
         tileDrawSystem.query(new Set(this.map.tileManager.tiles))
 
+        drawEntitySystem.query(new Set(this._entities))
+
         turnSystem.update()       
         tileDrawSystem.update()
+
+        drawEntitySystem.update()
         //this.map.update(delta) // not sure if I need this, uncertain as of 10/20/2024
 
-        for (const entity of this._entities) {
-             entity.update(delta)
-        }       
+        // for (const entity of this._entities) {
+        //      entity.update(delta)
+        // }       
 
         ActionQueue.processActions(delta)
         return this
