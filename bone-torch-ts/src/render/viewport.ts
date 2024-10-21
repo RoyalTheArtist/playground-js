@@ -44,37 +44,3 @@ export class Viewport implements IInitialize {
       this.surface.drawRect(0, 0, this.surface.width, this.surface.height, color)
     }
   }
-  
-const BASE_URL = 'src/'
-
-export class Texture {
-    private _url: string
-    private _image: HTMLImageElement
-    private _loaded: boolean = false
-    constructor(url: string) {
-        this._url = url
-        this._image = new Image()
-        this._image.src = BASE_URL + this._url
-    }
-
-    get url() {
-        return this._url
-    }
-
-    get image() {
-        if (!this._loaded) return null
-        return this._image
-    }
-
-    get loaded() {
-        return this._loaded
-    }
-    async load() {
-        return new Promise((resolve, reject) => {
-            this._image.onload = () => {
-                this._loaded = true
-                resolve(this._image)
-            }
-        })
-    }
-}
