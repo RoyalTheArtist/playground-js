@@ -33,7 +33,10 @@ export class Engine implements IUpdate {
         this.viewport.clear()
         const delta = timePassed - this._lastUpdate
         this._lastUpdate = timePassed
-        this.screen?.update(delta)
+        const screen = this.screen?.update(delta)
+        if (!Object.is(screen, this.screen)) {
+            this.setScreen(screen as BaseScreen)
+        }
         this.viewport.draw()
 
         window.requestAnimationFrame((timeStamp) => {

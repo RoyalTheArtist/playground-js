@@ -34,6 +34,8 @@ export const Blank_Tile = {
 export function createMap(mapData: number[], width: number, height: number) {
   const tiles = processMap(mapData)
   const map = loadMap({ width, height, tiles })
+  map.initialize()
+  map.process()
   return map
 }
 

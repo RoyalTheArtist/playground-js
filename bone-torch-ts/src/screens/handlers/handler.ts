@@ -1,9 +1,11 @@
-import { Action} from "../../actors"
+import { Action} from "../../modules/actors"
 import { StandardGameInput } from "../../input"
+import { BaseScreen } from "../screens"
 
 
 export abstract class InputHandler {
-    abstract handleInput(input: StandardGameInput, delta: number): Action 
+    public parent: BaseScreen
+    abstract handleInput(input: StandardGameInput): Action | null
 }
 
 

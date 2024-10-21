@@ -1,4 +1,4 @@
-import { NoAction } from "../../actors";
+import { NoAction } from "../../modules/actors";
 import { StandardGameInput } from "../../input";
 import { InputHandler } from "./handler";
 

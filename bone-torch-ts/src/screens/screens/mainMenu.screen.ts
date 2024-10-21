@@ -1,18 +1,30 @@
+import { InputManager } from "../../input"
+import { SurfaceLayer } from "../../render"
+import { Color } from "../../utils"
+import { Settings } from "../../utils/settings"
 import { BaseScreen } from "./base"
+import { GameScreen } from "./game.screen"
 
-export class MainMenu extends BaseScreen {
-    logged: boolean = false
+export class MainMenuScreen extends BaseScreen {
+    initialize() {
+        
+    }
     update(_delta: number) {
-        if (!this.logged) {
-            console.log('main menu')
-            this.logged = true
+        const inputs = InputManager.getInputs(Settings.keyboardMappings.mainMenu)
+        if (inputs.actions.has("new_game") && inputs.actions.get("new_game") === "pressed") {
+            return new GameScreen().initialize()
         }
         
-          //surface.clear()
-        // surface.drawRect(0, 0, 800, 600, 'black')
-        // surface.drawText('Bone Torch', 400, 200, 'white', 32)
-        // surface.drawText('(N) New Game', 400, 300, 'white', 16)
-        // surface.drawText('(T) Test Chamber', 400, 325, 'white', 16)
-        // surface.drawText('(Q) Quit', 400, 350, 'white', 16)
+        SurfaceLayer.background.clear()
+        SurfaceLayer.foreground.clear()
+
+        const white = new Color(255, 255, 255)
+
+        SurfaceLayer.background.drawText('Bone Torch', 400, 200, white, 32)
+        SurfaceLayer.background.drawText('(N) New Game', 400, 300, white, 16)
+        SurfaceLayer.background.drawText('(T) Test Chamber', 400, 325, white, 16)
+        SurfaceLayer.background.drawText('(Q) Quit', 400, 350, white, 16)
+        
+        return this
     }
 }

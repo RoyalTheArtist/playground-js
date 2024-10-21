@@ -1,9 +1,8 @@
-import { IComponent } from "./component.h"
-import { IInitialize, IRender, IUpdate } from "../engine/update.h"
+import { Component } from "./component.h"
+import { IInitialize, IUpdate } from "../engine/update.h"
 import { Vector2D } from "../utils"
 
-type constr<T> = { new(...args: unknown[]): T }
-
+type constr<T extends Component> = new(...args: any[]) => T 
 
 export class Rectangle {
     constructor(public start: Vector2D, public end: Vector2D) { }
@@ -11,42 +10,39 @@ export class Rectangle {
 
 
 export abstract class Entity implements IUpdate, IInitialize { 
-    protected _components: Set<IComponent> = new Set()
-    protected _renderComponents: Set<IComponent> = new Set()
+    protected _components: Map<Function, Component> = new Map()
 
-    public get components(): Set<IComponent> {
+
+    public get components() {
         return this._components
     }
 
-    public addComponent(component: IComponent) {
-        this._components.add(component)
+    public addComponent(component: Component) {
+        this._components.set(component.constructor, component)
 
-        if ('render' in component) {
-            this._renderComponents.add(component)
-        }
         component.parent = this
     }
 
-    public hasComponent<C extends IComponent>(c: constr<C>): boolean {
-        for (const component of this._components) {
-            if (component instanceof c) {
-                return true
-            }
-        }
-        return false
+    public hasComponent(c: Function): boolean {
+        return this.components.has(c)
     }
 
-    public getComponent<C extends IComponent>(c: constr<C>): C {
-        for (const component of this._components) {
-            if (component instanceof c) {
-                return component
+    public hasAll<C extends Component>(componentClasses: Iterable<constr<C>>): boolean {
+        for (let componentClass of componentClasses) {
+            if (!this.hasComponent(componentClass)) {
+                return false
             }
         }
+        return true
+    }
+
+    public getComponent<T extends Component>(c: constr<T>): T {
+        this.components.get(c) as T
         throw new Error('Component not found')
     }
 
-    public removeComponent<C extends IComponent>(c: constr<C>) {
-        for (const component of this._components) {
+    public removeComponent<C extends Component>(c: constr<C>) {
+        for (const component of this._components.keys()) {
             if (component instanceof c) {
                 this._components.delete(component)
                 break;
@@ -55,13 +51,13 @@ export abstract class Entity implements IUpdate, IInitialize {
     }
 
     public update(delta: number): void {
-        for (const component of this._components) {
+        for (const component of this._components.values()) {
             component.update(delta)
         }
     }
 
     public initialize() {
-        for (const component of this._components) {
+        for (const component of this._components.values()) {
             component.initialize()
         }
     }

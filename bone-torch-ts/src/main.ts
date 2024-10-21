@@ -1,8 +1,9 @@
+
 import './style.scss'
 
-import { Viewport, Surface, SurfaceLayer } from './render'
+import { Viewport, Surface } from './render'
 import { Engine } from './engine/engine'
-import { GameScreen } from './screens'
+import { MainMenuScreen } from './screens'
 import { Vector2D } from './utils'
 
 
@@ -11,7 +12,7 @@ function main() {
   const viewport = new Viewport(surface.initialize())
   viewport.initialize()
   const engine = new Engine(viewport)
-  engine.setScreen(new GameScreen())
+  engine.setScreen(new MainMenuScreen())
   engine.start()
 }
 
