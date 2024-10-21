@@ -1,4 +1,4 @@
-import { Entity } from "../../../ecs"
+import { Entity } from "../../../engine/ecs"
 import { ImpossibleException } from "../../../utils/exceptions"
 import { Action } from "./moveActions"
 

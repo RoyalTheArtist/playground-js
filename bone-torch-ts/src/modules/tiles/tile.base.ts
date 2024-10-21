@@ -1,4 +1,4 @@
-import { Entity } from "../../ecs"
+import { Entity } from "../../engine/ecs"
 import { IInitialize } from "../../engine"
 import { Vector2D } from "../../utils"
 import { TileDrawComponent } from "./tile.components"

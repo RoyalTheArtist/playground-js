@@ -2,7 +2,7 @@ import { Viewport } from "../render";
 import { BaseScreen } from "../screens";
 import { IUpdate } from "./update.h";
 
-import { KeyboardManager } from "../input";
+import { KeyboardManager } from "./input";
 export class Engine implements IUpdate {
     protected _screen: BaseScreen | null = null
     protected _lastUpdate: number = 0
@@ -30,13 +30,15 @@ export class Engine implements IUpdate {
     }
 
     update(timePassed: number) {
-        this.viewport.clear()
         const delta = timePassed - this._lastUpdate
         this._lastUpdate = timePassed
+
+        this.viewport.clear()
         const screen = this.screen?.update(delta)
         if (!Object.is(screen, this.screen)) {
             this.setScreen(screen as BaseScreen)
         }
+        
         this.viewport.draw()
 
         window.requestAnimationFrame((timeStamp) => {

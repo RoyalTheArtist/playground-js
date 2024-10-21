@@ -1,4 +1,4 @@
-import { Component } from "../../ecs"
+import { Component } from "../../engine/ecs"
 import { SurfaceLayer } from "../../render"
 import { Vector2D } from "../../utils"
 import { Settings } from "../../utils/settings"

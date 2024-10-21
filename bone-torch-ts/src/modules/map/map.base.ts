@@ -1,4 +1,4 @@
-import { Entity } from "../../ecs"
+import { Entity } from "../../engine/ecs"
 import { IInitialize } from "../../engine"
 import { Tile } from "../tiles"
 import { Vector2D } from "../../utils"
@@ -41,11 +41,8 @@ export class GameMap extends Entity implements IInitialize {
   }
   
   public process() {
-    calculateBitmask(this)
+    this.tileManager.process()
   }
-
-  
-  
 
   public saveMap(): IMapData {
     return {

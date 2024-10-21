@@ -1,4 +1,4 @@
-import { Entity } from "../../../ecs"
+import { Entity } from "../../../engine/ecs"
 import { GameMap } from "../../../maps"
 import { Vector2D } from "../../../utils"
 import { ImpossibleException } from "../../../utils/exceptions"

@@ -1,4 +1,4 @@
-import { IComponent } from "../../ecs"
+import { IComponent } from "../../engine/ecs"
 import { Action, NoAction } from "./actions"
 import { Actor } from "./actors"
 

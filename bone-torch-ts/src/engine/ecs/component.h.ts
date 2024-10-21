@@ -1,5 +1,5 @@
 import { Entity } from "./entity";
-import { IInitialize, IUpdate } from "../engine/update.h";
+import { IInitialize, IUpdate } from "@/engine";
 export abstract class Component implements IUpdate, IInitialize {
     parent: Entity | null
 

@@ -1,6 +1,6 @@
 import { Component } from "./component.h"
-import { IInitialize, IUpdate } from "../engine/update.h"
-import { Vector2D } from "../utils"
+import { IInitialize, IUpdate } from "@/engine"
+import { Vector2D } from "@/utils"
 
 type constr<T extends Component> = new(...args: any[]) => T 
 

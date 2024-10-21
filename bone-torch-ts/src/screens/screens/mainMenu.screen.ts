@@ -1,9 +1,9 @@
-import { InputManager } from "../../input"
-import { SurfaceLayer } from "../../render"
-import { Color } from "../../utils"
-import { Settings } from "../../utils/settings"
-import { BaseScreen } from "./base"
+import { BaseScreen } from "../../engine/screen.base"
 import { GameScreen } from "./game.screen"
+
+import { InputManager } from "@/engine/input"
+import { SurfaceLayer } from "@/render"
+import { Color, Settings } from "@/utils"
 
 export class MainMenuScreen extends BaseScreen {
     initialize() {

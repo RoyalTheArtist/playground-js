@@ -1,7 +1,7 @@
 import './style.scss'
 import { TileSetLoader, MapView } from './mapmaker/components'
 import { BaseApp } from './app'
-import { GameMap, loadMap } from './maps'
+import { GameMap, loadMap } from './modules/map'
 import { TileSetView } from './mapmaker/mm.tileSet'
 import { MapInfoView } from './mapmaker/mm.mapInfo'
 

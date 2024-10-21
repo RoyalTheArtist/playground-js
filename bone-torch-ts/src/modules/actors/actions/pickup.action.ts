@@ -1,4 +1,4 @@
-import { Entity } from "../../../ecs"
+import { Entity } from "../../../engine/ecs"
 import { ImpossibleException } from "../../../utils/exceptions"
 import { Actor, Inventory } from "../actors"
 import { Action } from "./moveActions"
@@ -21,11 +21,11 @@ export class PickupAction extends Action {
                     throw new ImpossibleException('Your inventory is full')
                 }
 
-                gameMap.removeEntity(item)
+                //gameMap.removeEntity(item)
                 item.parent = inventory
                 inventory.items.push(item)
 
-                window.messageLog.addMessage(`You picked up the ${item.name}`)
+                //window.messageLog.addMessage(`You picked up the ${item.name}`)
                 return
             }
         }

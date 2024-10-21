@@ -1,9 +1,9 @@
-import { Component, Entity } from "../../ecs";
-import { GameMap } from "../../maps";
-import { SurfaceLayer } from "../../render";
-import { Color, Vector2D } from "../../utils";
-import { Settings } from "../../utils/settings";
-import { Item } from "../items/items.base";
+import { Component, Entity } from "@/engine/ecs";
+import { GameMap } from "@/modules/map";
+import { SurfaceLayer } from "@/render";
+import { Color, Vector2D } from "@/utils";
+import { Settings } from "@/utils/settings";
+import { Item } from "@/modules/items";
 
 
 const TILE_SIZE = Settings.tiles.size.x

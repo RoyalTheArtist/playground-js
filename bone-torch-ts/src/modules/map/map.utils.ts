@@ -1,6 +1,6 @@
-import { Color, Vector2D } from "../utils"
+import { Vector2D } from "../../utils"
 import { GameMap, IMapData } from "./map"
-import { FLOOR_TILE, Tile, TileObject, WALL_TILE } from "./tiles"
+import { FLOOR_TILE, Tile, TileObject, WALL_TILE } from "../../maps/tiles"
 
 const TILE_ATLAS = new Map<string | number, Tile>([
     [1, WALL_TILE],
@@ -70,7 +70,7 @@ export function createEmptyMap(size: Vector2D) {
  */
 export function loadMap(mapData: IMapData) {
     const map = new GameMap(new Vector2D(mapData.width, mapData.height))
-    map.setTiles(createTiles(mapData.tiles, new Vector2D(mapData.width, mapData.height)))  
+    map.tileManager.setTiles(createTiles(mapData.tiles, new Vector2D(mapData.width, mapData.height)))  
     return map
 }
 

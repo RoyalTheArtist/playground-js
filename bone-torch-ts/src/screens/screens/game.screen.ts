@@ -1,14 +1,18 @@
 
-import { Actor, AI } from "../../modules/actors"
-import { Entity, System } from "../../ecs"
-import { InputManager, ActionMapping } from "../../input"
-import { createMap, GameMap, TileDrawSystem } from "../../maps"
-import { Vector2D } from "../../utils"
-import { GameInputHandler, InputHandler } from "../handlers"
-import { BaseScreen } from "./base"
-import { ActionQueue, MoveAction } from "../../modules/actors/actions"
-import { Player, spawnPlayer } from "../../player"
-import { Settings } from "../../utils/settings"
+import { BaseScreen } from "../../engine/screen.base"
+
+import { Entity, System } from "@/engine/ecs"
+import { InputManager } from "@/engine/input"
+
+import { Actor, AI, ActionQueue, MoveAction } from "@/modules/actors"
+import { createMap, GameMap } from "@/modules/map"
+import { TileDrawSystem } from "@/modules/tiles"
+
+import { GameInputHandler, InputHandler } from "@/screens/handlers"
+
+import { Player, spawnPlayer } from "@/player"
+import { Vector2D, Settings } from "@/utils"
+
 
 // 1 = wall
 const mapDataOne = [
@@ -38,13 +42,6 @@ const mapDataTwo = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   ]
 
-  const gameScreenMapping: ActionMapping = {
-    w: ['move_up', 'inventory_scroll_up'],
-    s: ['move_down', 'inventory_scroll_down'],
-    a: ['move_left', 'inventory_scroll_left'],
-    d: ['move_right', 'inventory_scroll_right'],
-    i: ['open_inventory']
-}
 
 const tileDrawSystem = new TileDrawSystem()
 
@@ -80,7 +77,6 @@ export class GameScreen extends BaseScreen  {
 
     constructor() {
         super()
-        this._handler.parent = this
     }
 
     public initialize(): GameScreen {
@@ -105,7 +101,7 @@ export class GameScreen extends BaseScreen  {
         }
 
         turnSystem.query(new Set(this._activeActors))
-        tileDrawSystem.query(new Set(this.map.tiles))
+        tileDrawSystem.query(new Set(this.map.tileManager.tiles))
 
         turnSystem.update()       
         tileDrawSystem.update()

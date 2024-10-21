@@ -1,10 +1,10 @@
 
 import './style.scss'
 
-import { Viewport, Surface } from './render'
-import { Engine } from './engine/engine'
-import { MainMenuScreen } from './screens'
-import { Vector2D } from './utils'
+import { Viewport, Surface } from '@/render'
+import { Engine } from '@/engine'
+import { MainMenuScreen } from '@/screens'
+import { Vector2D } from '@/utils'
 
 
 function main() {

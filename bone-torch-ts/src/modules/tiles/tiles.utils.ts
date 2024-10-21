@@ -1,3 +1,4 @@
+import { Vector2D } from "../../utils"
 import { TileManager } from "./tile.manager"
 
 const bitmaskDirections = [

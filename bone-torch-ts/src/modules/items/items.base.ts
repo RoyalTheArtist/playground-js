@@ -1,4 +1,4 @@
-import { Entity } from "../../ecs";
+import { Entity } from "../../engine/ecs";
 
 export abstract class Item extends Entity {
     constructor() {

@@ -1,4 +1,4 @@
-import { ActionMapping } from "../input/types";
+import { ActionMapping } from "../engine/input/types";
 import { Vector2D } from "./vectors";
 
 
