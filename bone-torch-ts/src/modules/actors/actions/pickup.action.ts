@@ -1,7 +1,8 @@
-import { Entity } from "../../../engine/ecs"
-import { ImpossibleException } from "../../../utils/exceptions"
-import { Actor, Inventory } from "../actors"
 import { Action } from "./moveActions"
+
+import { Entity } from "@/engine/ecs"
+import { ImpossibleException } from "@/utils/exceptions"
+import { Actor, Inventory } from "@/modules/actors"
 
 export class PickupAction extends Action {
     perform(entity: Entity) {

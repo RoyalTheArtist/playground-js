@@ -1,8 +1,7 @@
-import { Entity } from "../../../engine/ecs"
-import { GameMap } from "../../../maps"
-import { Vector2D } from "../../../utils"
-import { ImpossibleException } from "../../../utils/exceptions"
-import { Actor } from "../actors"
+import { Entity } from "@/engine/ecs"
+
+import { Vector2D, ImpossibleException } from "@/utils"
+import { Actor } from "@/modules/actors"
 
 export abstract class Action {
     abstract perform(entity: Entity): void

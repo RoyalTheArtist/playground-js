@@ -1,4 +1,4 @@
-import { Entity, System } from "../../engine/ecs"
+import { Entity, System } from "bt-engine/ecs"
 import { TileDrawComponent } from "./tile.components"
 
 export class TileDrawSystem extends System {

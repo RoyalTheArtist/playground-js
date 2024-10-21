@@ -1,8 +1,8 @@
-import { Entity } from "../../engine/ecs"
-import { IInitialize } from "../../engine"
-import { Tile } from "../tiles"
-import { Vector2D } from "../../utils"
-import { TileManager } from "../tiles"
+import { Entity } from "bt-engine/ecs"
+import { IInitialize } from "bt-engine"
+
+import { Tile, TileManager } from "@/modules/tiles"
+import { Vector2D } from "@/utils"
 
 export interface IMapData {
   width: number
@@ -32,17 +32,12 @@ export class GameMap extends Entity implements IInitialize {
 
   public initialize() {
     this.tileManager.initialize()
-
-    this.process()
   }
 
   public update(delta: number) { 
     this.tileManager.update(delta)
   }
   
-  public process() {
-    this.tileManager.process()
-  }
 
   public saveMap(): IMapData {
     return {

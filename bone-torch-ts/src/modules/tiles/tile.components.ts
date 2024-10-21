@@ -1,8 +1,8 @@
-import { Component } from "../../engine/ecs"
-import { SurfaceLayer } from "../../render"
-import { Vector2D } from "../../utils"
-import { Settings } from "../../utils/settings"
-import { TileObject } from "."
+import { TileObject } from "./tile.base"
+
+import { Component } from "@/engine/ecs"
+import { SurfaceLayer } from "@/render"
+import { Color, Vector2D, Settings } from "@/utils"
 
 const TILE_SIZE = Settings.tiles.size.x
 

@@ -1,5 +1,5 @@
 
-import { BaseScreen } from "../../engine/screen.base"
+import { BaseScreen } from "bt-engine"
 
 import { Entity, System } from "@/engine/ecs"
 import { InputManager } from "@/engine/input"

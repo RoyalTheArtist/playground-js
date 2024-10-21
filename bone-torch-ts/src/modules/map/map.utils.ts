@@ -1,16 +1,14 @@
-import { Vector2D } from "../../utils"
-import { GameMap, IMapData } from "./map"
-import { FLOOR_TILE, Tile, TileObject, WALL_TILE } from "../../maps/tiles"
+
+import { GameMap, IMapData } from "./map.base"
+
+import { Vector2D } from "@/utils"
+import { FLOOR_TILE, Tile, TileObject, WALL_TILE } from "@/modules/tiles"
 
 const TILE_ATLAS = new Map<string | number, Tile>([
     [1, WALL_TILE],
     [0, FLOOR_TILE],
   ])
   
-  
-
-
-
 export const Blank_Tile = {
     passable: true,
     transparent: true,
@@ -35,7 +33,6 @@ export function createMap(mapData: number[], width: number, height: number) {
   const tiles = processMap(mapData)
   const map = loadMap({ width, height, tiles })
   map.initialize()
-  map.process()
   return map
 }
 

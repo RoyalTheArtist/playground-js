@@ -1,6 +1,8 @@
-import { Entity } from "../../../engine/ecs"
-import { ImpossibleException } from "../../../utils/exceptions"
 import { Action } from "./moveActions"
+
+import { Entity } from "@/engine/ecs"
+import { ImpossibleException } from "@/utils/"
+
 
 export type ActionRequest = {
     entity: Entity,

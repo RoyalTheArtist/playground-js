@@ -1,8 +1,8 @@
 import { Component } from "./component.h"
-import { IInitialize, IUpdate } from "@/engine"
+import { IInitialize, IUpdate } from "bt-engine"
 import { Vector2D } from "@/utils"
 
-type constr<T extends Component> = new(...args: any[]) => T 
+type constr<T extends Component> = { new(...args: any[]): T } 
 
 export class Rectangle {
     constructor(public start: Vector2D, public end: Vector2D) { }
@@ -10,21 +10,26 @@ export class Rectangle {
 
 
 export abstract class Entity implements IUpdate, IInitialize { 
-    protected _components: Map<Function, Component> = new Map()
-
+    protected _components: Set<Component> = new Set()
 
     public get components() {
         return this._components
     }
 
     public addComponent(component: Component) {
-        this._components.set(component.constructor, component)
+        if (this.hasComponent(component.constructor as constr<Component>)) return
+        this.components.add(component)
 
         component.parent = this
     }
 
-    public hasComponent(c: Function): boolean {
-        return this.components.has(c)
+    public hasComponent<C extends Component>(c: constr<C>): boolean {
+        for (const component of this._components) {
+            if (component instanceof c) {
+                return true
+            }
+        }
+        return false
     }
 
     public hasAll<C extends Component>(componentClasses: Iterable<constr<C>>): boolean {
@@ -37,7 +42,11 @@ export abstract class Entity implements IUpdate, IInitialize {
     }
 
     public getComponent<T extends Component>(c: constr<T>): T {
-        this.components.get(c) as T
+        for (const component of this.components) {
+            if (component instanceof c) {
+                return component as T
+            }
+        }
         throw new Error('Component not found')
     }
 

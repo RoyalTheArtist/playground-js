@@ -1,8 +1,8 @@
-import { IComponent } from "../../engine/ecs"
+import { Component } from "@/engine/ecs"
 import { Action, NoAction } from "./actions"
 import { Actor } from "./actors"
 
-export class AI implements IComponent {
+export class AI implements Component {
     public parent: Actor
 
     public  initialize(): void {}
