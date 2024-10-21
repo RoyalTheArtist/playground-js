@@ -8,7 +8,7 @@ export const Settings = Object.freeze({
         size: new Vector2D(10, 10)
     },
     tiles: {
-        size: new Vector2D(32, 32)
+        size: new Vector2D(16, 16)
     },
     keyboardMappings: {
         gameScreen: {

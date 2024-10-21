@@ -1,0 +1,50 @@
+{
+    "tileset": {
+        "meta": {
+            "size": [16, 16],
+            "spritesheet": "assets/images/dungeon_sewers_001.png"
+        },
+        "tiles": {
+            "brick": {
+                "passable": false,
+                "transparent": false,
+                "sprite": "brick"
+            },
+            "floor_bare": {
+                "passable": true,
+                "transparent": true,
+                "sprite": "floor_bare"
+            },
+            "floor_wood": {
+                "passable": true,
+                "transparent": true,
+                "sprite": "floor_wood"
+            },
+            "doorway": {
+                "passable": false,
+                "transparent": true,
+                "sprite": "doorway"
+            },
+            "stairs": {
+                "passable": true,
+                "transparent": true,
+                "sprite": "stairs"
+            }
+        }
+    },
+    "spritesheet": {
+        "meta": {
+            "resource": "assets/images/dungeon_sewers_001.png",
+            "tileset": {
+                "size": [16,16]
+            }
+        },
+        "atlas": {
+            "brick": [0, 0, 16, 16],
+            "floor_bare": [20, 0, 16, 16],
+            "floor_wood": [40, 0, 16, 16],
+            "doorway": [0, 20, 16, 16],
+            "stairs": [20, 20, 16, 16]
+        }
+    }
+}

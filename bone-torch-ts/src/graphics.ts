@@ -8,6 +8,7 @@ export class Texture {
         this._url = url
         this._image = new Image()
         this._image.src = BASE_URL + this._url
+        this.load()
     }
 
     get url() {
