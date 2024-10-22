@@ -1,4 +1,4 @@
-import { Texture } from "@/graphics"
+import { Texture } from "./resources/texture"
 import { Vector2D } from "@/utils"
 
 export type SpriteAtlas = Map<string, [number, number, number, number]>
