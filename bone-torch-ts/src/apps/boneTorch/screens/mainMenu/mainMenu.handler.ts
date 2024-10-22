@@ -1,4 +1,4 @@
-import { NoAction } from "@/modules/actors";
+import { NoAction } from "@/apps/boneTorch/modules/actors";
 import { StandardGameInput } from "bt-engine/input";
 import { InputHandler } from "bt-engine";
 

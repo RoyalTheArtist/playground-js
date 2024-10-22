@@ -1,6 +1,6 @@
 import { Vector2D } from '../../utils/vectors';
 import { Viewport, Surface } from "../../render"
-import { Blank_Tile, GameMap } from "@/modules/map"
+import { Blank_Tile, GameMap } from "@/apps/boneTorch/modules/map"
 import { Tile } from "@/modules/tiles"
 import { App, } from "../app.base"
 import { MapMaker } from "./mapmaker"

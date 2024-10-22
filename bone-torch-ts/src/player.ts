@@ -1,14 +1,25 @@
-import { Action, Actor, AI, NoAction } from "./modules/actors"
+import { Action, Actor, AI, NoAction } from "./apps/boneTorch/modules/actors"
 import { Vector2D } from "./utils"
 
 export class Player {
-    static _nextTurn: Action | null = null
+    private static _nextTurn: Action | null = null
+    private static _player: Actor | null = null
+
+    static get player(): Actor | null { return Player._player }
 
     static get nextTurn(): Action | null {
         return Player._nextTurn
     }
     static setNextTurn(action: Action | null) {
         Player._nextTurn = action
+    }
+
+    static spawnPlayerAt(position: Vector2D) {
+        if (Player._player) {
+            return Player._player
+        }
+        Player._player = spawnPlayer(position)
+        return Player._player
     }
 }
 

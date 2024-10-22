@@ -1,7 +1,7 @@
 import { Entity } from "@/engine/ecs"
 
 import { Vector2D, ImpossibleException } from "@/utils"
-import { Actor } from "@/modules/actors"
+import { Actor } from "@/apps/boneTorch/modules/actors"
 
 export abstract class Action {
     abstract perform(entity: Entity): void

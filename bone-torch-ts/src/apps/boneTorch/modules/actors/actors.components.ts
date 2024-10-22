@@ -1,10 +1,8 @@
-import { Component, Entity } from "@/engine/ecs";
-import { GameMap } from "@/modules/map";
-import { SurfaceLayer } from "@/render";
-import { Color, Vector2D } from "@/utils";
-import { Settings } from "@/utils/settings";
-import { Item } from "@/modules/items";
-
+import { Component } from "@/engine/ecs"
+import { Actor } from "./actors"
+import { Color, Settings, Vector2D } from "@/utils"
+import { SurfaceLayer } from "@/render"
+import { Item } from "@bt/modules/items"
 
 const TILE_SIZE = Settings.tiles.size.x
 const ENTITY_RADIUS = (TILE_SIZE - 2) / 2
@@ -55,22 +53,4 @@ export class Inventory extends Component {
 
     public initialize() {}
     public update() {}
-}
-
-export class Actor extends Entity {
-    parent: GameMap
-    constructor(public position: Vector2D) {
-        super();
-    }
-
-    public initialize(): void {
-        this.addComponent(new Inventory(10));
-        this.addComponent(new ActorLocomotionComponent());
-        this.addComponent(new ActorDrawComponent());
-        super.initialize();
-    }
-
-    public moveTo(direction: Vector2D) {
-        this.position = new Vector2D(this.position.x + direction.x, this.position.y + direction.y)
-    }
 }

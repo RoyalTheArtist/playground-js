@@ -1,4 +1,4 @@
-import { Action} from "@/modules/actors"
+import { Action} from "@/apps/boneTorch/modules/actors"
 import { StandardGameInput } from "bt-engine/input"
 
 export abstract class InputHandler {

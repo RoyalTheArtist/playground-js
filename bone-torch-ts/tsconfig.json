@@ -20,7 +20,9 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@/*": ["./src/*"],
-      "bt-engine/*": ["./src/engine/*"]
+      "bt-engine/*": ["./src/engine/*"],
+      "@bt/*": ["./src/apps/boneTorch/*"],
+      "bt-engine": ["./src/engine"],
     }
   },
   "include": ["src", "vite.config.ts"]

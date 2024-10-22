@@ -1,7 +1,7 @@
 import './style.scss'
 import { TileSetLoader, MapView } from './components'
 import { App } from '../app.base'
-import { GameMap, loadMap } from '../../modules/map'
+import { GameMap, loadMap } from '../boneTorch/modules/map'
 import { TileSetView } from './mm.tileSet'
 import { MapInfoView } from './mm.mapInfo'
 import { Vector2D } from '../../utils'

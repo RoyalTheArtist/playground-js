@@ -4,14 +4,15 @@ import { BaseScreen } from "bt-engine"
 import { Entity, System } from "@/engine/ecs"
 import { InputManager } from "@/engine/input"
 
-import { Actor, AI, ActionQueue, MoveAction, DrawEntitySystem } from "@/modules/actors"
-import { createMap, GameMap } from "@/modules/map"
-import { TileDrawSystem } from "@/modules/tiles"
+import { Actor, AI, ActionQueue, MoveAction, DrawEntitySystem } from "@/apps/boneTorch/modules/actors"
+import { createMap, GameMap } from "@/apps/boneTorch/modules/map"
+import { TileDrawSystem } from "@bt/modules/tiles"
 
 import { GameInputHandler } from "../handlers"
 
 import { Player, spawnPlayer } from "@/player"
 import { Vector2D, Settings } from "@/utils"
+import { RenderSystem } from "@/modules/graphics"
 
 
 // 1 = wall
@@ -45,6 +46,7 @@ const mapDataTwo = [
 
 const tileDrawSystem = new TileDrawSystem()
 const drawEntitySystem = new DrawEntitySystem()
+const renderSystem = new RenderSystem()
 
 class TurnSystem extends System {
     public componentsRequired = new Set([AI])
@@ -72,7 +74,6 @@ export class GameScreen extends BaseScreen  {
     private _handler: GameInputHandler = new GameInputHandler()
     private _map: GameMap
     private _entities: Set<Entity> = new Set()
-    private _player: Actor
     private _activeActors: Set<Actor> = new Set()
 
 
@@ -83,10 +84,10 @@ export class GameScreen extends BaseScreen  {
     public initialize(): GameScreen {
         this._map = createMap(mapDataOne, 10, 10)
 
-        this._player = spawnPlayer(new Vector2D(5, 5))
-        this._player.parent = this._map
-        this._entities.add(this._player)
-        this._activeActors.add(this._player)
+        const player = spawnPlayer(new Vector2D(5, 5))
+        player.parent = this._map
+        this._entities.add(player)
+        this._activeActors.add(player)
         return this
     }
 
@@ -95,20 +96,21 @@ export class GameScreen extends BaseScreen  {
     }
     update(delta: number) {
         const inputs = InputManager.getInputs(Settings.keyboardMappings.gameScreen)
-        const result = this._handler.handleInput(inputs)
-        
-        if (result instanceof MoveAction) {
-            Player.setNextTurn(result)
-        }
+        this._handler.handleInput(inputs)
+    
+        const allEntities = new Set([...this._entities, ...this.map.tileManager.tiles])
 
         turnSystem.query(new Set(this._activeActors))
         tileDrawSystem.query(new Set(this.map.tileManager.tiles))
-
         drawEntitySystem.query(new Set(this._entities))
+        renderSystem.query(allEntities)
+
 
         turnSystem.update()       
         tileDrawSystem.update()
         drawEntitySystem.update()
+        renderSystem.update()
+
         this.map.update(delta) // not sure if I need this, uncertain as of 10/20/2024
 
         ActionQueue.processActions(delta)

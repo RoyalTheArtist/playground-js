@@ -1,1 +1,1 @@
-export * from './actors'
+export * from '../apps/boneTorch/modules/actors'

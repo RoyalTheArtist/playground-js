@@ -1,5 +1,5 @@
 import { Entity, System } from 'bt-engine/ecs'
-import { ActorDrawComponent } from './actors'
+import { ActorDrawComponent } from './actors.components'
 
 export class DrawEntitySystem extends System {
     public componentsRequired = new Set([ActorDrawComponent])
