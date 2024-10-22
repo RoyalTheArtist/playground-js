@@ -1,7 +1,7 @@
 import { Action } from "./moveActions"
 
 import { Entity } from "@/engine/ecs"
-import { ImpossibleException } from "@/utils/exceptions"
+import { ImpossibleException } from "bt-engine/utils/exceptions"
 import { Actor, Inventory } from "@/apps/boneTorch/modules/actors"
 
 export class PickupAction extends Action {

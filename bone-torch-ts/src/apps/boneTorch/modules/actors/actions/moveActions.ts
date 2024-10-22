@@ -1,7 +1,7 @@
-import { Entity } from "@/engine/ecs"
+import { Entity } from "bt-engine/ecs"
 
-import { Vector2D, ImpossibleException } from "@/utils"
-import { Actor } from "@/apps/boneTorch/modules/actors"
+import { Vector2D, ImpossibleException } from "bt-engine/utils"
+import { Actor } from "bone-torch/modules/actors"
 
 export abstract class Action {
     abstract perform(entity: Entity): void

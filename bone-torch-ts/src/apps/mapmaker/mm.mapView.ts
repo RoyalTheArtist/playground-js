@@ -1,4 +1,4 @@
-import { Vector2D } from '../../utils/vectors';
+import { Vector2D } from 'bt-engine/utils/vectors';
 import { Viewport, Surface } from "../../render"
 import { Blank_Tile, GameMap } from "@/apps/boneTorch/modules/map"
 import { Tile } from "@/modules/tiles"

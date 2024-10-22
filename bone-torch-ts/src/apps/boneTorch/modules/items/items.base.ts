@@ -1,4 +1,4 @@
-import { Entity } from "../../engine/ecs";
+import { Entity } from "bt-engine/ecs";
 
 export abstract class Item extends Entity {
     constructor() {

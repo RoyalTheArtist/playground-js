@@ -1,6 +1,6 @@
 import { Component } from "./component.h"
 import { IInitialize, IUpdate } from "bt-engine"
-import { Vector2D } from "@/utils"
+import { Vector2D } from "bt-engine/utils"
 
 type constr<T extends Component> = { new(...args: any[]): T } 
 

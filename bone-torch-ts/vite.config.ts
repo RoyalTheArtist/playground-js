@@ -7,6 +7,7 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, "./src"),
       'bt-engine': path.resolve(__dirname, "./src/engine"),
+      'bone-torch': path.resolve(__dirname, "./src/apps/boneTorch"),
     }
   }
 })

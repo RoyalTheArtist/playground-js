@@ -1,7 +1,4 @@
-import { ActionMapping } from "../engine/input/types";
-import { Vector2D } from "./vectors";
-
-
+import { Vector2D } from "bt-engine/utils";
 
 export const Settings = Object.freeze({
     map: {

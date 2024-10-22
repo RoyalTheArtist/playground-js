@@ -1,5 +1,5 @@
 
-import { Vector2D } from "../../utils"
+import { Vector2D } from "bt-engine/utils"
 import { TileObject, Tile } from "./tile.base"
 import { calculateBitmask } from "./tiles.utils"
 

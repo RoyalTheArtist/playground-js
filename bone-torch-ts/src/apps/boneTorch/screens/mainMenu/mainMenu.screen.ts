@@ -3,7 +3,9 @@ import { GameScreen } from "../gameScreen/game.screen"
 
 import { InputManager } from "@/engine/input"
 import { SurfaceLayer } from "@/render"
-import { Color, Settings } from "@/utils"
+import { Color } from "bt-engine/utils"
+
+import { Settings } from "bone-torch"
 
 export class MainMenuScreen extends BaseScreen {
     initialize() {

@@ -1,7 +1,7 @@
 import { Action } from "./moveActions"
 
-import { Entity } from "@/engine/ecs"
-import { ImpossibleException } from "@/utils/"
+import { Entity } from "bt-engine/ecs"
+import { ImpossibleException } from "bt-engine/utils/"
 
 
 export type ActionRequest = {

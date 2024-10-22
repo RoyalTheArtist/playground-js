@@ -4,7 +4,7 @@ import { App } from '../app.base'
 import { GameMap, loadMap } from '../boneTorch/modules/map'
 import { TileSetView } from './mm.tileSet'
 import { MapInfoView } from './mm.mapInfo'
-import { Vector2D } from '../../utils'
+import { Vector2D } from 'bt-engine/utils'
 
 declare global {
     interface Window {

@@ -1,8 +1,8 @@
-import { TileAppearance, TileDrawComponent } from "./tile.components"
+import { TileAppearance } from "./tile.components"
 
 import { Entity } from "bt-engine/ecs"
 import { IInitialize } from "@/engine"
-import { Vector2D } from "@/utils"
+import { Vector2D } from "bt-engine/utils"
 
 export class TileObject extends Entity implements IInitialize, Tile {
     public passable: boolean

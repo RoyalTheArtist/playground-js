@@ -1,11 +1,11 @@
 import { Appearance, TileObject } from "./tile.base"
 
-import { Component } from "@/engine/ecs"
-import { SurfaceLayer } from "@/render"
-import { Vector2D, Settings } from "@/utils"
-import { AssetManager } from "@/modules/assets"
+import { Component } from "bt-engine/ecs"
+import { AssetManager } from "bt-engine/assets"
 
-const TILE_SIZE = Settings.tiles.size.x
+import { SurfaceLayer } from "@/render"
+import { Vector2D } from "bt-engine/utils"
+
 
 export class TileDrawComponent implements Component {
   public parent: TileObject

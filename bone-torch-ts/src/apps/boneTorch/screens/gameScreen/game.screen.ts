@@ -1,19 +1,19 @@
 
+
+
+
+import { GameInputHandler } from "./game.handler"
+
 import { BaseScreen } from "bt-engine"
+import { Vector2D } from "bt-engine/utils"
+import { RenderSystem } from "bt-engine/graphics"
+import { InputManager } from "bt-engine/input"
+import { Entity, System } from "bt-engine/ecs"
 
-import { Entity, System } from "@/engine/ecs"
-import { InputManager } from "@/engine/input"
-
-import { Actor, AI, ActionQueue, MoveAction, DrawEntitySystem } from "@/apps/boneTorch/modules/actors"
-import { createMap, GameMap } from "@/apps/boneTorch/modules/map"
-import { TileDrawSystem } from "@bt/modules/tiles"
-
-import { GameInputHandler } from "../handlers"
-
-import { Player, spawnPlayer } from "@/player"
-import { Vector2D, Settings } from "@/utils"
-import { RenderSystem } from "@/modules/graphics"
-
+import { Player, Settings } from "bone-torch"
+import { TileDrawSystem } from "bone-torch/modules/tiles"
+import { createMap, GameMap } from "bone-torch/modules/map"
+import { Actor, AI, ActionQueue, MoveAction, DrawEntitySystem } from "bone-torch/modules/actors"
 
 // 1 = wall
 const mapDataOne = [
@@ -84,7 +84,7 @@ export class GameScreen extends BaseScreen  {
     public initialize(): GameScreen {
         this._map = createMap(mapDataOne, 10, 10)
 
-        const player = spawnPlayer(new Vector2D(5, 5))
+        const player = Player.spawnPlayerAt(new Vector2D(5, 5))
         player.parent = this._map
         this._entities.add(player)
         this._activeActors.add(player)

@@ -1,5 +1,5 @@
 
-import { SpriteSheet } from "@/modules/graphics";
+import { SpriteSheet } from "@/engine/graphics";
 
 async function fetchJson(resource: string) { 
     try {

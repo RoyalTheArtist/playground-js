@@ -21,8 +21,9 @@
     "paths": {
       "@/*": ["./src/*"],
       "bt-engine/*": ["./src/engine/*"],
-      "@bt/*": ["./src/apps/boneTorch/*"],
       "bt-engine": ["./src/engine"],
+      "bone-torch/*": ["./src/apps/boneTorch/*"],
+      "bone-torch": ["./src/apps/boneTorch"],
     }
   },
   "include": ["src", "vite.config.ts"]

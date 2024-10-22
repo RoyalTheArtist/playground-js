@@ -1,9 +1,9 @@
 import { Action, MoveAction } from "@/apps/boneTorch/modules/actors"
 import { StandardGameInput } from "bt-engine/input"
-import { Vector2D } from "@/utils"
+import { Vector2D } from "bt-engine/utils"
 
 import { InputHandler } from "bt-engine"
-import { Player } from "@/player"
+import { Player } from "@/apps/boneTorch/player"
 
 export class GameInputHandler extends InputHandler { 
     handleInput(input: StandardGameInput): Action | null {

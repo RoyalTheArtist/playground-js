@@ -1,9 +1,12 @@
 
-import { Entity } from "@/engine/ecs";
-import { GameMap } from "@/apps/boneTorch/modules/map";
-import { Vector2D } from "@/utils";
-import { ActorDrawComponent, Inventory } from "./actors.components";
+import { Entity } from "bt-engine/ecs";
+import { Vector2D } from "bt-engine/utils";
+import { GameMap } from "bone-torch/modules/map";
 
+import { ActorDrawComponent, Inventory } from "./actors.components";
+import { Settings } from "../../settings";
+
+const TILE_SIZE = Settings.tiles.size
 
 export class Actor extends Entity {
     parent: GameMap
@@ -13,7 +16,7 @@ export class Actor extends Entity {
 
     public initialize(): void {
         this.addComponent(new Inventory(10));
-        this.addComponent(new ActorDrawComponent());
+        this.addComponent(new ActorDrawComponent(new Vector2D(TILE_SIZE.x, TILE_SIZE.y)));
         super.initialize();
     }
 

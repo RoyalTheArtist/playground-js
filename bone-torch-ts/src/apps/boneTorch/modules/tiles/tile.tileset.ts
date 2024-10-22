@@ -1,4 +1,4 @@
-import { ISpriteSheetData, SpriteSheet } from "../graphics/graphics.spriteSheet";
+import { ISpriteSheetData, SpriteSheet } from "@/engine/graphics";
 import { IInitialize } from "@/engine";
 import { Tile } from ".";
 

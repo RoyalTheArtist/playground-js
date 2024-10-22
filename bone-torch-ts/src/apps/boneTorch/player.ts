@@ -1,5 +1,6 @@
-import { Action, Actor, AI, NoAction } from "./apps/boneTorch/modules/actors"
-import { Vector2D } from "./utils"
+import { Action, Actor, AI, NoAction } from "./modules/actors"
+import { Vector2D } from "bt-engine/utils"
+import { Position } from "./components"
 
 export class Player {
     private static _nextTurn: Action | null = null
@@ -19,6 +20,7 @@ export class Player {
             return Player._player
         }
         Player._player = spawnPlayer(position)
+        Player._player.addComponent(new Position(position))
         return Player._player
     }
 }

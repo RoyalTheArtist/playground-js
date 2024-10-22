@@ -1,6 +1,8 @@
-import { IInitialize } from "../engine"
-import { Color, Vector2D } from "../utils"
 import { Surface, SurfaceLayer } from "./surface"
+
+import { IInitialize } from "bt-engine"
+import { Color, Vector2D } from "bt-engine/utils"
+
 
 export class Viewport implements IInitialize {
     private _surface: Surface
@@ -19,7 +21,7 @@ export class Viewport implements IInitialize {
   
     public draw() {
       this.surface.clear()
-      this.surface.drawRect(0, 0, 800, 600, Color.fromString('black'))
+      this.surface.drawRect(new Vector2D(0, 0), new Vector2D(this.surface.width, this.surface.height), Color.fromString('black'))
       this.surface.draw(SurfaceLayer.background.canvas, 0, 0)
       this.surface.draw(SurfaceLayer.foreground.canvas, 0, 0)
     }

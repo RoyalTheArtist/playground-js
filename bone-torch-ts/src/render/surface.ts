@@ -1,5 +1,5 @@
-import { IInitialize } from "../engine"
-import { Color, Vector2D } from "../utils"
+import { IInitialize } from "bt-engine"
+import { Color, Vector2D } from "bt-engine/utils"
 
 export class Surface implements IInitialize {
     resolution: Vector2D
@@ -52,9 +52,9 @@ export class Surface implements IInitialize {
       this.context.clearRect(0, 0, this.width, this.height)
     }
   
-    public drawRect(x: number, y: number, width: number, height: number, color: Color = new Color(0, 0, 0)) {
+    public drawRect(position: Vector2D, dimensions: Vector2D, color: Color = new Color(0, 0, 0)) {
       this.context.fillStyle = color.asString()
-      this.context.fillRect(x, y, width, height)
+      this.context.fillRect(position.x, position.y, dimensions.x, dimensions.y)
     }
 
     public drawStrokeRect(position: Vector2D, size: Vector2D, color: Color) {

@@ -1,4 +1,4 @@
-import { AssetManager } from "@/modules/assets"
+import { AssetManager } from "@/engine/assets"
 
 
 export class Texture {

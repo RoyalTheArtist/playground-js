@@ -3,8 +3,8 @@ import '@/style.scss'
 import { Viewport, Surface } from '@/render'
 import { Engine } from '@/engine'
 import { MainMenuScreen } from './screens'
-import { Vector2D } from '@/utils'
-import { AssetManager } from '@/modules/assets';
+import { Vector2D } from 'bt-engine/utils'
+import { AssetManager } from '@/engine/assets';
 import { App } from '../app.base'
 
 

@@ -1,4 +1,4 @@
-import { Vector2D } from "../../utils"
+import { Vector2D } from "bt-engine/utils"
 
 export type ActionMapping = Record<string, string[]>
 
