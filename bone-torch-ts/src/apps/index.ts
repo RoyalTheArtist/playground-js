@@ -1,1 +1,1 @@
-export * from './boneTorch'
+export * from './boneTorch/boneTorch'

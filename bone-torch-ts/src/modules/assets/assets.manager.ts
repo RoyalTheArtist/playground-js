@@ -1,5 +1,5 @@
 import { ITileSetManifest } from "@/modules/tiles/tile.tileset";
-import { SpriteSheet } from "../graphics.spriteSheet";
+import { SpriteSheet } from "@/modules/graphics";
 
 async function fetchJson(resource: string) { 
     try {
@@ -14,9 +14,10 @@ async function fetchJson(resource: string) {
 
 export class AssetManager {
     private static spritesheets: Map<string, SpriteSheet> = new Map()
+    public static _baseUrl = 'src/'
 
     public static async loadSpritesheet(resource: string) {
-        const spriteJSON = await fetchJson(resource)
+        const spriteJSON = await fetchJson(this.baseUrl + resource)
         if (!spriteJSON) throw new Error('Resource not found')
         
         const spritesheet = SpriteSheet.from(spriteJSON)
@@ -37,5 +38,11 @@ export class AssetManager {
         return this.spritesheets.get(resource)
     }
 
+    public static get baseUrl() {
+        return this._baseUrl
+    }
 
+    public static set baseUrl(url: string) {
+        this._baseUrl = url
+    }
 }

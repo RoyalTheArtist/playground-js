@@ -1,21 +1,23 @@
-import { Viewport, Surface } from "../render"
-import { Blank_Tile, GameMap, Tile } from "../maps"
-import { BaseAppComponent } from "../app"
-import { MapMaker } from "../mapmaker"
-import { MouseHandler } from "../mouse"
-import { TileSet } from "../assetManager/tiles"
+import { Vector2D } from '../../utils/vectors';
+import { Viewport, Surface } from "../../render"
+import { Blank_Tile, GameMap } from "@/modules/map"
+import { Tile } from "@/modules/tiles"
+import { App, } from "../app.base"
+import { MapMaker } from "./mapmaker"
+import { MouseHandler } from "../../engine/input/mouse"
+import { TileSet } from "../../assetManager/tiles"
 
 
 
-export class MapView extends BaseAppComponent {
+export class MapView extends App {
     _el: HTMLElement
     width: number
     height: number
     _screen: Viewport | null = null
     mouse: MouseHandler
     activeTile: Tile | null = null
-    constructor(parent: MapMaker, elem: string) {
-        super(parent)
+    constructor(public parent: MapMaker, elem: string) {
+        super()
         this._el = document.querySelector(elem) as HTMLElement
 
         if (!this._el) {
@@ -29,7 +31,8 @@ export class MapView extends BaseAppComponent {
     }
 
     public init() {
-        this._screen = new Viewport()
+        const surface = new Surface(new Vector2D(this.width, this.height)).initialize()
+        this._screen = new Viewport(surface)
 
         this.mouse?.init(this._screen.surface.canvas)
 
@@ -45,19 +48,19 @@ export class MapView extends BaseAppComponent {
             if (!this.activeTile) return
 
             if (state.rightMouse) {
-                (this.parent as MapMaker).map.setTile(this.mouse.lockedPos.x, this.mouse.lockedPos.y, { ...Blank_Tile})
+                (this.parent as MapMaker).map.tileManager.setTile(this.mouse.lockedPos.x, this.mouse.lockedPos.y, { ...Blank_Tile})
             } else {
-                (this.parent as MapMaker).map.setTile(this.mouse.lockedPos.x, this.mouse.lockedPos.y, this.activeTile)
+                (this.parent as MapMaker).map.tileManager.setTile(this.mouse.lockedPos.x, this.mouse.lockedPos.y, this.activeTile)
             }
             
         }).onMouseMove((state) => {
             if (!this.mouse.pressed || !this.activeTile) return
             
             if (state.rightMouse) {
-                (this.parent as MapMaker).map.setTile(this.mouse.lockedPos.x, this.mouse.lockedPos.y, { ...Blank_Tile})
+                (this.parent as MapMaker).map.tileManager.setTile(this.mouse.lockedPos.x, this.mouse.lockedPos.y, { ...Blank_Tile})
                 return
             }
-            (this.parent as MapMaker).map.setTile(this.mouse.lockedPos.x, this.mouse.lockedPos.y, this.activeTile)
+            (this.parent as MapMaker).map.tileManager.setTile(this.mouse.lockedPos.x, this.mouse.lockedPos.y, this.activeTile)
         })
     }
 
@@ -70,8 +73,8 @@ export class MapView extends BaseAppComponent {
         this._screen.drawAlpha(grid, 0, 0, 1, 0.5)
 
         if ((this.parent as MapMaker).tileSet && (this.parent as MapMaker).tileSet.tileset) {
-            const map = drawMap((this.parent as MapMaker).map, (this.parent as MapMaker).tileSet.tileset)
-            this._screen.render(map, 0, 0)
+            //const map = drawMap((this.parent as MapMaker).map, (this.parent as MapMaker).tileSet.tileset)
+            //this._screen.render(map, 0, 0)
         }
 
         drawMouse(this.mouse, this._screen)
@@ -94,7 +97,7 @@ function drawMouse(mouse: MouseHandler, screen: Viewport) {
 }
 
 function drawGrid(width: number, height: number, tileWidth: number, tileHeight: number): HTMLCanvasElement {
-    const surface = new Surface(width * tileWidth, height * tileHeight)
+    const surface = new Surface(new Vector2D(width * tileWidth, height * tileHeight))
     const ctx = surface.context
     ctx.strokeStyle = 'rgba(255,255,255)'
         
@@ -119,18 +122,18 @@ function drawMap(map: GameMap, tileSet: TileSet): HTMLCanvasElement {
     const TILE_HEIGHT = tileSet.tileHeight
     const TILE_WIDTH = tileSet.tileWidth
   
-    const surface = new Surface(map.width * TILE_WIDTH, map.height * TILE_HEIGHT)
+    const surface = new Surface(new Vector2D(map.width * TILE_WIDTH, map.height * TILE_HEIGHT))
 
-    map.tiles.forEach((tile, index) => {
-        if (!tile.sprite || tile.sprite === "blank") return
+    map.tileManager.tiles.forEach((tile, index) => {
+        //if (!tile.sprite || tile.sprite === "blank") return
         
-        const tileImage = tileSet.getTileImage(tile.sprite)
-        if(!tileImage) return
-      const x = (index % map.width) * TILE_WIDTH
-      const y = Math.floor(index / map.width) * TILE_HEIGHT
+        //const tileImage = tileSet.getTileImage(tile.sprite)
+        //if(!tileImage) return
+    //   const x = (index % map.width) * TILE_WIDTH
+    //   const y = Math.floor(index / map.width) * TILE_HEIGHT
         
       
-      surface.draw(tileImage, x, y)
+    //   surface.draw(tileImage, x, y)
     })
 
     return surface.canvas

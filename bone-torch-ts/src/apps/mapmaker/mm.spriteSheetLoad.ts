@@ -1,5 +1,5 @@
-import { loadTileSet, TileSetAtlas, TileSetData } from "../assetManager/tiles"
-import { MapMaker } from "../mapmaker"
+import { loadTileSet, TileSetAtlas, TileSetData } from "../../assetManager/tiles"
+import { MapMaker } from "./mapmaker"
 
 class EventTimer {
     private _start: number

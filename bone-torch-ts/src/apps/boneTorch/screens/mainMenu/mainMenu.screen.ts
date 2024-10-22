@@ -1,5 +1,5 @@
-import { BaseScreen } from "../../engine/screen.base"
-import { GameScreen } from "./game.screen"
+import { BaseScreen } from "bt-engine/screen.base"
+import { GameScreen } from "../gameScreen/game.screen"
 
 import { InputManager } from "@/engine/input"
 import { SurfaceLayer } from "@/render"

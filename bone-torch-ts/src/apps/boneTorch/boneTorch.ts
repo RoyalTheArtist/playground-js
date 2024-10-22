@@ -2,17 +2,16 @@ import '@/style.scss'
 
 import { Viewport, Surface } from '@/render'
 import { Engine } from '@/engine'
-import { MainMenuScreen } from '@/screens'
+import { MainMenuScreen } from './screens'
 import { Vector2D } from '@/utils'
-import { AssetManager } from '@/modules/graphics/assets';
+import { AssetManager } from '@/modules/assets';
+import { App } from '../app.base'
 
 
 //TileSetManager.buildManifest('sewers',sewerTileset)
-AssetManager.loadSpritesheet('src/data/sewers.sprites.json')
+AssetManager.baseUrl = 'src/apps/boneTorch/'
+AssetManager.loadSpritesheet('data/sewers.sprites.json')
 
-export abstract class App {
-    public start() {}
-}
 
 export class BoneTorch extends App {
 

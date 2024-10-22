@@ -4,3 +4,7 @@ export interface IInitialize {
 export interface IUpdate {
     update(delta: number): void
 }
+
+export interface IStart {
+    start(): void
+}

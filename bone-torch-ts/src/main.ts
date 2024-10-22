@@ -1,4 +1,4 @@
-import { BoneTorch } from "./apps"
+import { BoneTorch } from "./apps/boneTorch"
 function main() {
     const game = new BoneTorch()
 

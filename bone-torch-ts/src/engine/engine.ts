@@ -1,9 +1,9 @@
 import { Viewport } from "../render";
-import { BaseScreen } from "../screens";
-import { IUpdate } from "./update.h";
+import { BaseScreen } from "./screen.base";
+import { IStart, IUpdate } from "./update.h";
 
 import { KeyboardManager } from "./input";
-export class Engine implements IUpdate {
+export class Engine implements IUpdate, IStart {
     protected _screen: BaseScreen | null = null
     protected _lastUpdate: number = 0
     private _viewport: Viewport
@@ -22,17 +22,14 @@ export class Engine implements IUpdate {
 
     start() {
         new KeyboardManager()
-        window.requestAnimationFrame(() => this.update(performance.now()))
+        window.requestAnimationFrame(() => this.update(0))
     }
 
     setScreen(screen: BaseScreen) {
         this._screen = screen
     }
 
-    update(timePassed: number) {
-        const delta = timePassed - this._lastUpdate
-        this._lastUpdate = timePassed
-
+    update(delta: number) {
         this.viewport.clear()
         const screen = this.screen?.update(delta)
         if (!Object.is(screen, this.screen)) {
@@ -42,7 +39,9 @@ export class Engine implements IUpdate {
         this.viewport.draw()
 
         window.requestAnimationFrame((timeStamp) => {
-            this.update(timeStamp)
+            const delta = timeStamp - this._lastUpdate
+            this._lastUpdate = timeStamp
+            this.update(delta)
         })
     }
 }
