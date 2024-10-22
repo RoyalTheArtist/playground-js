@@ -1,4 +1,5 @@
-import { Vector2D } from "../../utils"
+import { Vector2D } from "@/utils"
+import { TileBitmask } from "./tile.components"
 import { TileManager } from "./tile.manager"
 
 const bitmaskDirections = [
@@ -29,7 +30,7 @@ export function calculateBitmask(manager: TileManager) {
             }
           }) 
           
-          tile.bitmask = bitmask
+          tile.addComponent(new TileBitmask(bitmask))
         }
       }
     }

@@ -1,5 +1,5 @@
 export interface IInitialize {
-    initialize(): void
+    initialize(...args: any): void
 }
 export interface IUpdate {
     update(delta: number): void

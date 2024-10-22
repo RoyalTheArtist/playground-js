@@ -108,13 +108,8 @@ export class GameScreen extends BaseScreen  {
 
         turnSystem.update()       
         tileDrawSystem.update()
-
         drawEntitySystem.update()
-        //this.map.update(delta) // not sure if I need this, uncertain as of 10/20/2024
-
-        // for (const entity of this._entities) {
-        //      entity.update(delta)
-        // }       
+        this.map.update(delta) // not sure if I need this, uncertain as of 10/20/2024
 
         ActionQueue.processActions(delta)
         return this
