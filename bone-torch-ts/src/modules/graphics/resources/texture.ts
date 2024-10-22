@@ -1,10 +1,12 @@
-  
-const BASE_URL = 'src/'
+import { AssetManager } from "@/modules/assets"
+
+
 export class Texture {
     private _url: string
     private _image: HTMLImageElement
     private _loaded: boolean = false
     constructor(url: string) {
+        const BASE_URL = AssetManager.baseUrl
         this._url = url
         this._image = new Image()
         this._image.src = BASE_URL + this._url

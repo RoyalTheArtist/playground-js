@@ -1,9 +1,10 @@
 import './style.scss'
-import { TileSetLoader, MapView } from './mapmaker/components'
-import { BaseApp } from './app'
-import { GameMap, loadMap } from './modules/map'
-import { TileSetView } from './mapmaker/mm.tileSet'
-import { MapInfoView } from './mapmaker/mm.mapInfo'
+import { TileSetLoader, MapView } from './components'
+import { App } from '../app.base'
+import { GameMap, loadMap } from '../../modules/map'
+import { TileSetView } from './mm.tileSet'
+import { MapInfoView } from './mm.mapInfo'
+import { Vector2D } from '../../utils'
 
 declare global {
     interface Window {
@@ -49,7 +50,7 @@ class SignalSystem {
     }
 }
 
-export class MapMaker extends BaseApp {
+export class MapMaker extends App {
     map: GameMap
     tileSetLoader: TileSetLoader
     mapView: MapView
@@ -65,14 +66,14 @@ export class MapMaker extends BaseApp {
         this.tileSetLoader = new TileSetLoader(this, '#tileset-loader')
        
         //this.map = createMap(mapDataTwo, 10, 10)
-        this.map = new GameMap(25,25)
+        this.map = new GameMap(new Vector2D(25,25))
         this.mapView = new MapView(this, '#map')
         this.tileSet = new TileSetView(this, '#tileset')
 
         this.mapInfo = new MapInfoView(this, '#map-info')
     }
 
-    init() {
+    initialize() {
         this.tileSetLoader.init()
         this.mapView.init()
         this.tileSet.init()
@@ -118,7 +119,7 @@ const mapMaker = new MapMaker('#mapmaker')
 window.mapmaker = mapMaker
 function main() {
     
-    mapMaker.init()
+    mapMaker.initialize()
 
     function render() {
         mapMaker.render()

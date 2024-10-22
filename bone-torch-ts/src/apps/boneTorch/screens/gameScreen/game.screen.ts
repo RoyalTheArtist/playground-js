@@ -8,7 +8,7 @@ import { Actor, AI, ActionQueue, MoveAction, DrawEntitySystem } from "@/modules/
 import { createMap, GameMap } from "@/modules/map"
 import { TileDrawSystem } from "@/modules/tiles"
 
-import { GameInputHandler, InputHandler } from "@/screens/handlers"
+import { GameInputHandler } from "../handlers"
 
 import { Player, spawnPlayer } from "@/player"
 import { Vector2D, Settings } from "@/utils"
@@ -69,7 +69,7 @@ class TurnSystem extends System {
 const turnSystem = new TurnSystem()
 
 export class GameScreen extends BaseScreen  {
-    private _handler: InputHandler = new GameInputHandler()
+    private _handler: GameInputHandler = new GameInputHandler()
     private _map: GameMap
     private _entities: Set<Entity> = new Set()
     private _player: Actor

@@ -1,4 +1,4 @@
-import { Texture } from "@/graphics"
+import { Texture } from "./resources/texture"
 import { Vector2D } from "@/utils"
 
 export type SpriteAtlas = Map<string, [number, number, number, number]>
@@ -20,7 +20,7 @@ export class Sprite {
     private _texture: Texture
     private _start: Vector2D
     private _dimensions: Vector2D
-    private _canvas: HTMLCanvasElement | null
+    private _canvas: HTMLCanvasElement | null = null
 
     public get texture() {
         return this._texture

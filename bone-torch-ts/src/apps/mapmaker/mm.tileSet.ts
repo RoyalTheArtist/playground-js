@@ -1,21 +1,22 @@
-import { imageTextureShader } from './../../../webgl/shaders';
-import { BaseAppComponent } from "../app"
-import { TileSet } from "../assetManager/tiles"
+import { imageTextureShader } from '../../../../webgl/shaders';
+import { App } from "../app.base"
+import { TileSet } from "../../assetManager/tiles"
 import { Tile } from "../maps/map"
-import { MapMaker } from "../mapmaker"
+import { MapMaker } from "./mapmaker"
 
 
 
 
-export class TileSetView extends BaseAppComponent {
+export class TileSetView extends App {
     _el: HTMLElement
     tileset: TileSet | null
     activeTile: Tile | null = null
     activeTileView: HTMLElement 
     tileSetView: HTMLElement
+    parent: MapMaker
     constructor(parent: MapMaker, elem: string) {
-        super(parent)
-
+        super()
+        this.parent = parent
         this._el = document.querySelector(elem) as HTMLElement
 
         if (!this._el) {

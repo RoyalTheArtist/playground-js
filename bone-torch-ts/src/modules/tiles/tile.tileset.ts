@@ -1,7 +1,6 @@
-import { Texture } from "@/graphics";
 import { ISpriteSheetData, SpriteSheet } from "../graphics/graphics.spriteSheet";
 import { IInitialize } from "@/engine";
-import { Tile, TileObject } from ".";
+import { Tile } from ".";
 
 export interface ITileSetData {
     "meta": ITileSetMeta,
@@ -22,7 +21,7 @@ export interface ITileSetManifest {
 
 export class TileSet implements IInitialize {
     private _spritesheet: SpriteSheet
-    private _tiles: Map<string, TileObject> = new Map()
+    private _tiles: Map<string, Tile> = new Map()
     private _meta: ITileSetMeta
     private _tileDefinition: Record<string, Tile> = {}
     // public static fromManifest(tiledata: ITileSetManifest) {
@@ -65,12 +64,5 @@ export class TileSetManager {
         // const spriteSheet = SpriteSheet.from(data.meta.spritesheet)
         // const tileset = new TileSet()
         // this.addTileSet(name, tileset)
-    }
-
-    public static buildFromManifest(name: string, data: ITileSetManifest) {
-        const spritesheet = SpriteSheet.from(data.spritesheet)
-        const tileset = new TileSet(spritesheet)
-        tileset.initialize()
-
     }
 }
