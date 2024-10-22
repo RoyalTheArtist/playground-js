@@ -57,7 +57,7 @@ export class TileAppearance implements Component {
     if (!spritesheet) return
     const sprite = spritesheet.getSprite(this.appearance.sprite)
     if (!sprite.canvas) return
-    SurfaceLayer.background.draw(sprite.canvas, this.center.x, this.center.y)
+    SurfaceLayer.background.draw(sprite.canvas, this.start.x, this.start.y)
   }
 }
 

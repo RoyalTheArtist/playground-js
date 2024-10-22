@@ -9,8 +9,6 @@ export const FLOOR_TILE: Tile = {
       color: "black"
     }
   }
-
-
   
   export const WALL_TILE: Tile = {
     passable: false,
