@@ -22,7 +22,10 @@ export class TileObject extends Entity implements IInitialize, Tile {
       //this.addComponent(new TileDrawComponent())
       
       if (this._tile.appearance) {
-        this.addComponent(new TileAppearance(this._tile.appearance))
+        const appearance = new TileAppearance(
+          this._tile.appearance,
+          new Vector2D(16, 16))
+        this.addComponent(appearance)
       }
     }
 }

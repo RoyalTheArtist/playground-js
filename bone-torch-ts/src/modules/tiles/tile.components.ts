@@ -34,8 +34,16 @@ export class TileAppearance implements Component {
   public parent: TileObject
   private appearance: Appearance
 
-  constructor(appearance: Appearance) {
+  constructor(appearance: Appearance, public readonly dimensions: Vector2D) {
     this.appearance = appearance
+  }
+
+  public get start() {
+    return new Vector2D(this.parent.position.x * this.dimensions.x, this.parent.position.y * this.dimensions.y)
+  }
+
+  public get center() {
+    return new Vector2D(this.start.x + this.dimensions.x / 2, this.start.y + this.dimensions.y / 2)
   }
 
   initialize() {  }
@@ -49,7 +57,7 @@ export class TileAppearance implements Component {
     if (!spritesheet) return
     const sprite = spritesheet.getSprite(this.appearance.sprite)
     if (!sprite.canvas) return
-    SurfaceLayer.background.draw(sprite.canvas, this.parent.position.x * TILE_SIZE, this.parent.position.y * TILE_SIZE)
+    SurfaceLayer.background.draw(sprite.canvas, this.center.x, this.center.y)
   }
 }
 
