@@ -2,7 +2,7 @@ import { Component } from "./component.h"
 import { IInitialize, IUpdate } from "bt-engine"
 import { Vector2D } from "bt-engine/utils"
 
-type constr<T extends Component> = { new(...args: any[]): T } 
+type constr<T extends Component> = { new(...args: any[]): Component } 
 
 export class Rectangle {
     constructor(public start: Vector2D, public end: Vector2D) { }
@@ -17,7 +17,6 @@ export abstract class Entity implements IUpdate, IInitialize {
     }
 
     public addComponent(component: Component) {
-        if (this.hasComponent(component.constructor as constr<Component>)) return
         this.components.add(component)
 
         component.parent = this

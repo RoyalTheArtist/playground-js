@@ -5,9 +5,7 @@ export class Surface implements IInitialize {
     resolution: Vector2D
     private _canvas: HTMLCanvasElement
     private _ctx: CanvasRenderingContext2D
-    constructor(resolution: Vector2D) {
-        this.resolution = resolution
-    }
+
   
     public get canvas(): HTMLCanvasElement {
       return this._canvas
@@ -23,7 +21,11 @@ export class Surface implements IInitialize {
   
     public get height(): number {
       return this.resolution.y
-    }
+  }
+  
+  constructor(resolution: Vector2D) {
+      this.resolution = resolution
+  }
   
     public initialize(): Surface {
       const canvas = document.createElement("canvas")
@@ -46,24 +48,28 @@ export class Surface implements IInitialize {
       this.resolution = resolution
       this.canvas.width = width
       this.canvas.height = height
+      return this
     }
   
     public clear() {
       this.context.clearRect(0, 0, this.width, this.height)
+      return this
     }
   
     public drawRect(position: Vector2D, dimensions: Vector2D, color: Color = new Color(0, 0, 0)) {
       this.context.fillStyle = color.asString()
       this.context.fillRect(position.x, position.y, dimensions.x, dimensions.y)
+      return this
     }
 
     public drawStrokeRect(position: Vector2D, size: Vector2D, color: Color) {
         this.context.strokeStyle = color.asString()
-        this.context.strokeRect(position.x, position.y, size.x, size.y)
+      this.context.strokeRect(position.x, position.y, size.x, size.y)
+      return this
     }
   
-    public draw(image: HTMLImageElement | HTMLCanvasElement, x: number, y: number) {
-        this.context.drawImage(image, x, y)
+    public draw(image: HTMLImageElement | HTMLCanvasElement, position: Vector2D) {
+        this.context.drawImage(image, position.x, position.y)
     }
   
     public drawAlpha(img: HTMLImageElement | HTMLCanvasElement, x: number, y: number, zoom: number, alpha: number) {
@@ -73,12 +79,12 @@ export class Surface implements IInitialize {
       this.context.restore()
     }
   
-    public drawText(text: string, x: number, y: number, color: Color, size: number = 16) {
+    public drawText(text: string, position: Vector2D, color: Color, size: number = 16) {
       this.context.fillStyle = color.asString()
       this.context.textBaseline = "top"
       this.context.textAlign = "left"
       this.context.font = `${size}px sans-serif`
-      this.context.fillText(text, x, y) 
+      this.context.fillText(text, position.x, position.y) 
     }
 
     public fillCircle(position: Vector2D, radius: number, color: Color = new Color(0, 0, 0)) {

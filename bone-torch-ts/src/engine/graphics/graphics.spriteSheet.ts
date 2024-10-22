@@ -20,7 +20,9 @@ export class Sprite {
     private _texture: Texture
     private _start: Vector2D
     private _dimensions: Vector2D
-    private _canvas: HTMLCanvasElement | null = null
+
+    private _img: HTMLImageElement | null = null
+    private _working: boolean = false
 
     public get texture() {
         return this._texture
@@ -34,6 +36,13 @@ export class Sprite {
         return this._dimensions
     }
 
+    public get img() {
+        if (!this._img) {
+            this.build()
+        }
+        return this._img
+    }
+
     constructor(texture: Texture, start: Vector2D, dimensions: Vector2D) {
         this._texture = texture
         this._start = start
@@ -41,7 +50,9 @@ export class Sprite {
     }
 
     public build() {
-        if (!this.texture.loaded) return
+        if (!this.texture.loaded || this._working) return
+
+        this._working = true
         const canvas = document.createElement('canvas')
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
         canvas.width = this.dimensions.x
@@ -53,14 +64,12 @@ export class Sprite {
             this.dimensions.x,
             this.dimensions.y, 0, 0, this.dimensions.x, this.dimensions.y)
 
-        this._canvas = canvas
-    }
+    
 
-    public get canvas() {
-        if (!this._canvas) {
-            this.build()
-        }
-        return this._canvas
+        this._img = new Image()
+        this._img.src = canvas.toDataURL()
+
+        this._working = false
     }
 }
 

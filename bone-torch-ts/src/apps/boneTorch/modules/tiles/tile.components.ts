@@ -23,13 +23,6 @@ export class TileDrawComponent implements Component {
   }
 }
 
-
-export class Sprite {
-  public static from(url: string, frame: [number, number, number, number]) {
-    
-  }
-}
-
 export class TileAppearance implements Component {
   public parent: TileObject
   private appearance: Appearance
@@ -56,8 +49,8 @@ export class TileAppearance implements Component {
     const spritesheet = AssetManager.getSpriteSheet(this.appearance.resource)
     if (!spritesheet) return
     const sprite = spritesheet.getSprite(this.appearance.sprite)
-    if (!sprite.canvas) return
-    SurfaceLayer.background.draw(sprite.canvas, this.start.x, this.start.y)
+    if (!sprite.img) return
+    SurfaceLayer.background.draw(sprite.img, this.start)
   }
 }
 

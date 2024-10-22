@@ -20,10 +20,10 @@ export class Viewport implements IInitialize {
     }
   
     public draw() {
-      this.surface.clear()
-      this.surface.drawRect(new Vector2D(0, 0), new Vector2D(this.surface.width, this.surface.height), Color.fromString('black'))
-      this.surface.draw(SurfaceLayer.background.canvas, 0, 0)
-      this.surface.draw(SurfaceLayer.foreground.canvas, 0, 0)
+      
+      this.drawBackground()
+      this.surface.draw(SurfaceLayer.background.canvas, new Vector2D(0, 0))
+      this.surface.draw(SurfaceLayer.foreground.canvas, new Vector2D(0, 0))
     }
   
     public clear() {
@@ -43,6 +43,7 @@ export class Viewport implements IInitialize {
     }
   
   public drawBackground(color: Color = new Color(0, 0, 0)) {
-      this.surface.drawRect(0, 0, this.surface.width, this.surface.height, color)
+      this.surface.clear()
+      this.surface.drawRect(new Vector2D(0, 0), new Vector2D(this.surface.width, this.surface.height), color)
     }
   }

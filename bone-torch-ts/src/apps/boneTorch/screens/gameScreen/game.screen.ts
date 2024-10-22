@@ -13,7 +13,8 @@ import { Entity, System } from "bt-engine/ecs"
 import { Player, Settings } from "bone-torch"
 import { TileDrawSystem } from "bone-torch/modules/tiles"
 import { createMap, GameMap } from "bone-torch/modules/map"
-import { Actor, AI, ActionQueue, MoveAction, DrawEntitySystem } from "bone-torch/modules/actors"
+import { Actor, ActionQueue, DrawEntitySystem } from "bone-torch/modules/actors"
+import { TurnSystem } from "bone-torch/modules/actors"
 
 // 1 = wall
 const mapDataOne = [
@@ -47,27 +48,6 @@ const mapDataTwo = [
 const tileDrawSystem = new TileDrawSystem()
 const drawEntitySystem = new DrawEntitySystem()
 const renderSystem = new RenderSystem()
-
-class TurnSystem extends System {
-    public componentsRequired = new Set([AI])
-    public query(entities: Set<Entity>): void {
-        for (const entity of entities) {
-            if (entity.hasAll(this.componentsRequired)) {
-                this.components.add(entity.getComponent(AI))
-            }
-        }
-    }
-
-    public update(): void {
-        for (const currentTurn of this.components as Set<AI>) {
-            const action = currentTurn.perform(currentTurn.parent)
-            if (action instanceof MoveAction) {
-                ActionQueue.addAction(currentTurn.parent as Actor, action, 175)
-            }
-        }
-    }
-}
-
 const turnSystem = new TurnSystem()
 
 export class GameScreen extends BaseScreen  {
@@ -108,7 +88,7 @@ export class GameScreen extends BaseScreen  {
 
         turnSystem.update()       
         tileDrawSystem.update()
-        drawEntitySystem.update()
+        drawEntitySystem.update(delta)
         renderSystem.update()
 
         this.map.update(delta) // not sure if I need this, uncertain as of 10/20/2024

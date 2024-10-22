@@ -3,7 +3,7 @@ import { GameScreen } from "../gameScreen/game.screen"
 
 import { InputManager } from "@/engine/input"
 import { SurfaceLayer } from "@/render"
-import { Color } from "bt-engine/utils"
+import { Color, Vector2D } from "bt-engine/utils"
 
 import { Settings } from "bone-torch"
 
@@ -22,10 +22,10 @@ export class MainMenuScreen extends BaseScreen {
 
         const white = new Color(255, 255, 255)
 
-        SurfaceLayer.background.drawText('Bone Torch', 400, 200, white, 32)
-        SurfaceLayer.background.drawText('(N) New Game', 400, 300, white, 16)
-        SurfaceLayer.background.drawText('(T) Test Chamber', 400, 325, white, 16)
-        SurfaceLayer.background.drawText('(Q) Quit', 400, 350, white, 16)
+        SurfaceLayer.background.drawText('Bone Torch', new Vector2D(400, 200), white, 32)
+        SurfaceLayer.background.drawText('(N) New Game', new Vector2D(400, 250), white, 16)
+        SurfaceLayer.background.drawText('(T) Test Chamber', new Vector2D(400, 275), white, 16)
+        SurfaceLayer.background.drawText('(Q) Quit', new Vector2D(400, 300), white, 16)
         
         return this
     }

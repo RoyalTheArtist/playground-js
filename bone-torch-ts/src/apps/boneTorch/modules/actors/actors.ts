@@ -2,9 +2,11 @@
 import { Entity } from "bt-engine/ecs";
 import { Vector2D } from "bt-engine/utils";
 import { GameMap } from "bone-torch/modules/map";
+import { Settings } from "bone-torch/settings";
+import { Position } from "bone-torch/components";
 
 import { ActorDrawComponent, Inventory } from "./actors.components";
-import { Settings } from "../../settings";
+
 
 const TILE_SIZE = Settings.tiles.size
 
@@ -21,6 +23,8 @@ export class Actor extends Entity {
     }
 
     public moveTo(direction: Vector2D) {
+        const position = new Position(this.position)
+        this.addComponent(position);
         this.position = new Vector2D(this.position.x + direction.x, this.position.y + direction.y)
     }
 }
