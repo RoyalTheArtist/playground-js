@@ -3,6 +3,7 @@ import { BaseScreen } from "./screen.base";
 import { IStart, IUpdate } from "./update.h";
 
 import { KeyboardManager } from "./input";
+import { RenderAnimation } from "./graphics/animations/animations";
 export class Engine implements IUpdate, IStart {
     protected _screen: BaseScreen | null = null
     protected _lastUpdate: number = 0
@@ -31,6 +32,7 @@ export class Engine implements IUpdate, IStart {
 
     update(delta: number) {
         this.viewport.clear()
+        RenderAnimation.update(delta)
         const screen = this.screen?.update(delta)
         if (!Object.is(screen, this.screen)) {
             this.setScreen(screen as BaseScreen)

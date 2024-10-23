@@ -12,6 +12,10 @@ export class Player {
         return Player._nextTurn
     }
     static setNextTurn(action: Action | null) {
+        if (action) {
+            action.requester = Player._player as Actor
+        }
+        
         Player._nextTurn = action
     }
 

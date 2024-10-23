@@ -18,6 +18,12 @@ export class ActionQueue {
 
     static addAction(entity: Entity, action: Action, duration: number = 0) {
         if (this.actionsToClear.has(entity)) return
+
+        for (let request of this.actionQueue) {
+            if (request.entity === entity) {
+                return
+            }
+        }
         this.actionQueue.add({ entity, action, duration })
     }
 

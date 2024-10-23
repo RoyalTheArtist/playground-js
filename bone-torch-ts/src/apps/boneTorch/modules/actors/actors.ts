@@ -6,6 +6,7 @@ import { Settings } from "bone-torch/settings";
 import { Position } from "bone-torch/components";
 
 import { ActorDrawComponent, Inventory } from "./actors.components";
+import { MoveSpriteAnimation, RenderAnimation } from "bt-engine/graphics/animations";
 
 
 const TILE_SIZE = Settings.tiles.size
@@ -23,8 +24,12 @@ export class Actor extends Entity {
     }
 
     public moveTo(direction: Vector2D) {
-        const position = new Position(this.position)
-        this.addComponent(position);
-        this.position = new Vector2D(this.position.x + direction.x, this.position.y + direction.y)
+        const animation = RenderAnimation.triggerAnimation(new MoveSpriteAnimation(100, this.requester))
+        animation.onEnd(() => {
+            const position = new Position(this.position)
+            this.addComponent(position);
+            this.position = new Vector2D(this.position.x + direction.x, this.position.y + direction.y)
+        })
+       
     }
 }
