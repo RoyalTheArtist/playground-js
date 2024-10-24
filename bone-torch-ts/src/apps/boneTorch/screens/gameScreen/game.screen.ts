@@ -6,7 +6,7 @@ import { GameInputHandler } from "./game.handler"
 
 import { BaseScreen } from "bt-engine"
 import { Vector2D } from "bt-engine/utils"
-import { RenderSystem } from "bt-engine/graphics"
+import { renderSystem } from "bt-engine/graphics"
 import { InputManager } from "bt-engine/input"
 import { Entity, System } from "bt-engine/ecs"
 
@@ -44,10 +44,6 @@ const mapDataTwo = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   ]
 
-
-const tileDrawSystem = new TileDrawSystem()
-const drawEntitySystem = new DrawEntitySystem()
-const renderSystem = new RenderSystem()
 const turnSystem = new TurnSystem()
 
 export class GameScreen extends BaseScreen  {
@@ -81,18 +77,16 @@ export class GameScreen extends BaseScreen  {
         const allEntities = new Set([...this._entities, ...this.map.tileManager.tiles])
 
         turnSystem.query(new Set(this._activeActors))
-        tileDrawSystem.query(new Set(this.map.tileManager.tiles))
-        drawEntitySystem.query(new Set(this._entities))
+        //drawEntitySystem.query(new Set(this._entities))
         renderSystem.query(allEntities)
 
-
         turnSystem.update()       
-        tileDrawSystem.update()
-        drawEntitySystem.update(delta)
-        renderSystem.update()
 
-        this.map.update(delta) // not sure if I need this, uncertain as of 10/20/2024
+        //drawEntitySystem.update(delta)
+        renderSystem.update(delta)
 
+        //this.map.update(delta) // not sure if I need this, uncertain as of 10/24/2024
+        renderSystem.draw()
         ActionQueue.processActions(delta)
         return this
     }

@@ -1,3 +1,5 @@
+import { Entity } from "@/engine/ecs"
+import { GraphicObject } from "@/engine/graphics"
 import { IInitialize } from "bt-engine"
 import { Color, Vector2D } from "bt-engine/utils"
 
@@ -94,23 +96,44 @@ export class Surface implements IInitialize {
         this.context.fill()
     }
 }
+
+class GraphicsLayer {
+  public readonly surface: Surface 
+  objects: Map<Entity, GraphicObject> = new Map()
+
+  constructor(surface: Surface) {
+    this.surface = surface
+  }
+
+  public draw() {
+    this.surface.clear()
+    this.objects.forEach((object) => {
+       if (!object.sprite || !object.sprite.img) return
+       this.surface.draw(object.sprite.img, object.position)
+    })
+  }
+
+  public clear() {
+    this.surface.clear()
+  }
+}
   
 export class SurfaceLayer {
-  private static _background: Surface
-  private static _foreground: Surface
+  private static _background: GraphicsLayer
+  private static _foreground: GraphicsLayer
 
   private constructor() { }
 
-  public static get background(): Surface {
+  public static get background(): GraphicsLayer {
     if (!this._background) {
-        this._background = SurfaceLayer.getSurface()
+      this._background = new GraphicsLayer(SurfaceLayer.getSurface())
     }
     return this._background
   }
 
-  public static get foreground(): Surface {
+  public static get foreground(): GraphicsLayer {
     if (!this._foreground) {
-        this._foreground = SurfaceLayer.getSurface()
+        this._foreground = new GraphicsLayer(SurfaceLayer.getSurface())
     }
     return this._foreground
   }

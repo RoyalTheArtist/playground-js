@@ -35,7 +35,7 @@ export class GameMap extends Entity implements IInitialize {
   }
 
   public update(delta: number) { 
-    this.tileManager.update(delta)
+    //this.tileManager.update(delta)
   }
   
 

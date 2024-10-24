@@ -17,12 +17,14 @@ export interface ISpriteSheetData {
 }
 
 export class Sprite {
-    private _texture: Texture
+    private _texture: Texture | null = null
     private _start: Vector2D
     private _dimensions: Vector2D
 
     private _img: HTMLImageElement | null = null
     private _working: boolean = false
+
+    private offset: Vector2D = new Vector2D(0, 0)
 
     public get texture() {
         return this._texture
@@ -43,14 +45,20 @@ export class Sprite {
         return this._img
     }
 
-    constructor(texture: Texture, start: Vector2D, dimensions: Vector2D) {
+    public set img(img: HTMLImageElement | null) {
+        this._img = img
+    }
+
+    
+    constructor(texture: Texture | null, start: Vector2D, dimensions: Vector2D) {
         this._texture = texture
+
         this._start = start
         this._dimensions = dimensions
     }
 
     public build() {
-        if (!this.texture.loaded || this._working) return
+        if (!this.texture ||!this.texture.loaded || this._working) return
 
         this._working = true
         const canvas = document.createElement('canvas')
@@ -64,12 +72,15 @@ export class Sprite {
             this.dimensions.x,
             this.dimensions.y, 0, 0, this.dimensions.x, this.dimensions.y)
 
-    
-
         this._img = new Image()
         this._img.src = canvas.toDataURL()
 
         this._working = false
+    }
+
+    public setOffsetX(x: number) {
+        this.offset.x = x
+        this.build()
     }
 }
 

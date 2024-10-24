@@ -5,6 +5,7 @@ import { AssetManager } from "bt-engine/assets"
 
 import { SurfaceLayer } from "@/render"
 import { Vector2D } from "bt-engine/utils"
+import { RenderComponent } from "@/engine/graphics"
 
 
 export class TileDrawComponent implements Component {
@@ -23,11 +24,12 @@ export class TileDrawComponent implements Component {
   }
 }
 
-export class TileAppearance implements Component {
+export class TileAppearance extends RenderComponent {
   public parent: TileObject
   private appearance: Appearance
 
   constructor(appearance: Appearance, public readonly dimensions: Vector2D) {
+    super()
     this.appearance = appearance
   }
 
@@ -50,7 +52,7 @@ export class TileAppearance implements Component {
     if (!spritesheet) return
     const sprite = spritesheet.getSprite(this.appearance.sprite)
     if (!sprite.img) return
-    SurfaceLayer.background.draw(sprite.img, this.start)
+    SurfaceLayer.background.surface.draw(sprite.img, this.start)
   }
 }
 

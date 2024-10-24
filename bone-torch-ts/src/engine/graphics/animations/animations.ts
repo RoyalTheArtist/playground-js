@@ -1,33 +1,13 @@
 export class RenderAnimation {
     private _callback: Function | null = null
     public duration: number = 0
-    private static animations: Set<RenderAnimation> = new Set()
+    
+    public update(_delta: number) { }
 
-    public static triggerAnimation(animation: RenderAnimation) {
-        animation.start()
-
-        return animation
-    }
-
-    public static addAnimation(animation: RenderAnimation) {
-        this.animations.add(animation)
-    }
-
-    public static removeAnimation(animation: RenderAnimation) {
-        this.animations.delete(animation)
-    }
-
-    public static update(delta: number) {
-        for (const animation of this.animations) {
-            animation.duration -= delta
-            if (animation.duration <= 0) {
-                animation.end()
-            }
-        }
-    }
+    public initialize() {}
 
     public start() {
-        RenderAnimation.addAnimation(this)
+        
     }
 
     public end() {
@@ -36,7 +16,7 @@ export class RenderAnimation {
             this._callback = null
         }
 
-        RenderAnimation.removeAnimation(this)
+        AnimationManager.removeAnimation(this)
     }
 
     public onEnd(fn: Function) {
@@ -44,9 +24,24 @@ export class RenderAnimation {
     }
 }
 
-export class MoveSpriteAnimation extends RenderAnimation {
-    constructor(public readonly duration: number = 100) {
+export class AnimationManager {
+    private static animations: Set<RenderAnimation> = new Set()
 
-        super()
+    public static triggerAnimation(animation: RenderAnimation) {
+        animation.initialize()
+        animation.start()
+        this.animations.add(animation)
+        return animation
+    }
+
+    public static removeAnimation(animation: RenderAnimation) {
+        this.animations.delete(animation)
+    }
+
+    public static update(delta: number) {
+        for (const animation of this.animations) {
+            animation.update(delta)
+        }
     }
 }
+

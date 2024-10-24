@@ -17,9 +17,9 @@ export abstract class Entity implements IUpdate, IInitialize {
     }
 
     public addComponent(component: Component) {
-        this.components.add(component)
-
         component.parent = this
+        component.initialize()
+        this.components.add(component)
     }
 
     public hasComponent<C extends Component>(c: constr<C>): boolean {
