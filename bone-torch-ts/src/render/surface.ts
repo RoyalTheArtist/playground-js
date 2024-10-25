@@ -72,6 +72,10 @@ export class Surface implements IInitialize {
   
     public draw(image: HTMLImageElement | HTMLCanvasElement, position: Vector2D) {
         this.context.drawImage(image, position.x, position.y)
+  }
+  
+    public drawZoom(image: HTMLImageElement | HTMLCanvasElement, position: Vector2D, zoom: number) {
+        this.context.drawImage(image, position.x, position.y, image.width * zoom, image.height * zoom)
     }
   
     public drawAlpha(img: HTMLImageElement | HTMLCanvasElement, x: number, y: number, zoom: number, alpha: number) {

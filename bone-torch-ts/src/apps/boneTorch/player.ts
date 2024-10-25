@@ -50,6 +50,6 @@ export const spawnPlayer = (position: Vector2D) => {
     const player = new Actor(position)
     player.initialize()
     player.addComponent(new PlayerAI())
-    player.addComponent(new ActorAppearance({ shape: "circle" }))
+    player.addComponent(new ActorAppearance({ shape: "circle", resource: "sewers", sprite: "adventurer" }))
     return player
 }

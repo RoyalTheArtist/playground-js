@@ -1,0 +1,17 @@
+{
+    "sewers": {
+        "meta": {
+            "resource": "assets/images/dungeon_sewers_002.png",
+            "tiles": {
+                "size": [16,16]
+            }
+        },
+        "atlas": {
+            "grass": [0, 0],
+            "brick": [1, 0],
+            "rat": [0,1],
+            "adventurer": [1, 1],
+            "goblin": [2, 1]
+        }
+    }
+}

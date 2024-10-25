@@ -11,6 +11,7 @@ import { App } from '../app.base'
 //TileSetManager.buildManifest('sewers',sewerTileset)
 AssetManager.baseUrl = 'src/apps/boneTorch/'
 AssetManager.loadSpritesheet('data/sewers.sprites.json')
+AssetManager.loadSpritesheetManifest('data/spritesheets.json')
 
 
 export class BoneTorch extends App {

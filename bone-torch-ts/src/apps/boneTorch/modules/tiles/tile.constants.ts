@@ -4,8 +4,8 @@ export const FLOOR_TILE: Tile = {
     passable: true,
     transparent: true,
     appearance: {
-      resource: "data/sewers.sprites.json",
-      sprite: "floor_bare",
+      resource: "sewers",
+      sprite: "grass",
       color: "black"
     }
   }
@@ -14,7 +14,7 @@ export const FLOOR_TILE: Tile = {
     passable: false,
     transparent: true,
     appearance: {
-      resource: "data/sewers.sprites.json",
+      resource: "sewers",
       sprite: "brick",
       color: "white"
     }

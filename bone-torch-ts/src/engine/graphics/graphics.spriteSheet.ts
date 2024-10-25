@@ -1,19 +1,17 @@
 import { Texture } from "./resources/texture"
 import { Vector2D } from "bt-engine/utils"
 
-export type SpriteAtlas = Map<string, [number, number, number, number]>
-export type SpriteAtlasData = Record<string, [number, number, number, number]>
+export type SpriteAtlas = Map<string, [number, number]>
+export type SpriteAtlasData = Record<string, [number, number]>
 
 export interface ISpriteSheetData {
     "meta": {
         "resource": string,
-        "tileset": {
+        "tiles": {
             "size": [number, number]
         }
     },
-    "atlas": {
-        [key: string]: [number, number, number, number]
-    }
+    "atlas": SpriteAtlasData
 }
 
 export class Sprite {
@@ -88,16 +86,33 @@ export class SpriteSheet {
     private _texture: Texture
     private _atlas: SpriteAtlas = new Map()
     private sprites: Map<string, Sprite> = new Map()
-    constructor(texture: Texture) {
+    private data: ISpriteSheetData
+    private _meta: { tiles: { size: [number, number] } }
+
+    public get meta() {
+        return this._meta
+    }
+
+    constructor(texture: Texture, data: ISpriteSheetData) {
         this._texture = texture
+        this.data = data
+        this._meta = data.meta
         return this
     }
 
     public static from(data: ISpriteSheetData): SpriteSheet {
         const texture = new Texture(data.meta.resource)
-        const spritesheet = new SpriteSheet(texture)
+        const spritesheet = new SpriteSheet(texture, data)
         spritesheet.setAtlas(data.atlas)
         return spritesheet
+    }
+
+    public build() {
+        this.atlas.clear()
+        for (const [key, value] of Object.entries(this.data.atlas)) {
+            this.atlas.set(key, value)
+        }
+        return this
     }
 
     public get atlas() {
@@ -120,7 +135,13 @@ export class SpriteSheet {
         if (this.sprites.has(name)) {
             return this.sprites.get(name)!
         } else {
-            const sprite = new Sprite(this._texture, new Vector2D(this.atlas.get(name)![0], this.atlas.get(name)![1]), new Vector2D(this.atlas.get(name)![2], this.atlas.get(name)![3]))
+            const [row, column] = this.atlas.get(name)!
+
+            const sprite = new Sprite(
+                this._texture,
+                new Vector2D(row * this.meta.tiles.size[0], column * this.meta.tiles.size[1]),
+                new Vector2D(this.meta.tiles.size[0], this.meta.tiles.size[1]),
+            )
             sprite.build()
             this.sprites.set(name, sprite)
             return sprite

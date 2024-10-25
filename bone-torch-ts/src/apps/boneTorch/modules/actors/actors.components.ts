@@ -9,6 +9,7 @@ import { GraphicObject, RenderComponent, Sprite } from 'bt-engine/graphics'
 
 import { Item } from "bone-torch/modules/items"
 import { Position } from "bone-torch/components"
+import { AssetManager } from "@/engine/assets"
 
 
 
@@ -35,7 +36,9 @@ class CircleSprite extends Sprite {
 }
 
 type EntityAppearance = {
-    shape: "circle" | "square"
+    shape: "circle" | "square",
+    resource?: string,
+    sprite?: string,
 }
 
 export class ActorAppearance extends RenderComponent {
@@ -49,7 +52,12 @@ export class ActorAppearance extends RenderComponent {
     }
 
     public initialize() {
-        if (this.appearance.shape === "circle") {
+        if (this.appearance.resource && this.appearance.sprite) {
+            const spritesheet = AssetManager.getSpriteSheet(this.appearance.resource)
+            if (!spritesheet) return
+            const sprite = spritesheet.getSprite(this.appearance.sprite)
+            this.sprite = sprite
+        } else if (this.appearance.shape === "circle") {
             this.sprite = new CircleSprite(new Vector2D(0, 0), new Vector2D(16, 16), 6)
             this.sprite.build()
         }
@@ -67,8 +75,6 @@ export class ActorAppearance extends RenderComponent {
 }
 
 export class Inventory extends Component {
-    public parent: Actor
-
     private _items: Array<Item> = []
     constructor(public size: number) { super() }
 
